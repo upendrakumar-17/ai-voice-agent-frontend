@@ -22,13 +22,20 @@
 const canvas = document.getElementById("sphereCanvas");
 const ctx = canvas.getContext("2d");
 
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-const centerX = width / 2;
-const centerY = height / 2;
+//let width = canvas.width = window.innerWidth;
+//let height = canvas.height = window.innerHeight;
+ canvas.height = window.innerHeight;
+ canvas.width = window.innerWidth;
+
+let width=200;
+let height=200;
+
+
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
 
 const radius = Math.min(width, height) / 3;
-const dotsCount = 5000;
+const dotsCount = 1000;
 const dots = [];
 
 function getRandomBrightColor() {
@@ -47,14 +54,25 @@ for (let i = 0; i < dotsCount; i++) {
   const y = radius * Math.sin(phi) * Math.sin(theta);
   const z = radius * Math.cos(phi);
 
+  // let amplitudeType;
+  // if (i < (dotsCount) / 5) {
+  //   amplitudeType = "MAX";      // 🔊 Strong
+  // } else if (i < (2 * dotsCount) / 5) {
+  //   amplitudeType = "MEDIUM";   // 🟡 Moderate
+  // } else {
+  //   amplitudeType = "ZERO";     // ⚪ No movement
+  // }
+
   let amplitudeType;
-  if (i < dotsCount / 3) {
-    amplitudeType = "MAX";      // 🔊 Strong
-  } else if (i < (2 * dotsCount) / 3) {
-    amplitudeType = "MEDIUM";   // 🟡 Moderate
-  } else {
-    amplitudeType = "ZERO";     // ⚪ No movement
-  }
+
+if (i < (3 * dotsCount) / 6) {
+    amplitudeType = "MAX";   // 🔊 Strong
+} else if (i < (5 * dotsCount) / 6) { // 3+2=5 parts
+    amplitudeType = "MEDIUM"; // 🟡 Moderate
+} else {
+    amplitudeType = "ZERO";  // ⚪ No movement
+}
+
 
   dots.push({
     x,
@@ -116,12 +134,15 @@ function draw() {
 
     // 🎯 AMPLITUDE CONTROL
     if (dot.amplitudeType === "MAX") {
-      oscillationRadius += audioEnergy * 1.2; // 🔊 Maximum push
+      oscillationRadius += audioEnergy * 0.9; // 🔊 Maximum push
     }
     else if (dot.amplitudeType === "MEDIUM") {
-      oscillationRadius += audioEnergy * 0.7; // 🟡 Moderate push
+      oscillationRadius += audioEnergy * 0.6; // 🟡 Moderate push
     }
     // ZERO → no change
+    else{
+      oscillationRadius += audioEnergy * 0.3; // 🟡 Moderate push
+    }
 
     // Normalize vector
     const len = Math.sqrt(dot.x**2 + dot.y**2 + dot.z**2);

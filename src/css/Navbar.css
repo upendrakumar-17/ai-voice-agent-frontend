@@ -1,75 +1,86 @@
-/* Page-safe centering */
-body {
-  margin: 0;
-  background: #fff;
-}
-
-/* Pill Navbar Container */
-.navbar-container {
-  max-width: 900px;
-  margin: 20px auto;              /* centers horizontally */
-  padding: 14px 24px;
-  background-color: #ffffff;
-  color: #000000;
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 1200px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  border-radius: 999px;           /* pill shape */
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 12px 20px;
+  border-radius: 999px;
 
-  box-sizing: border-box;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  flex-shrink: 0;
 }
 
-/* Header */
-.navbar-header {
+.navbar__header {
   display: flex;
   align-items: center;
 }
 
-.navbar-title {
-  font-size: 1.4rem;
+
+.navbar__title {
+  font-size: 18px;
   font-weight: 600;
+  color: #1f2937;
   white-space: nowrap;
 }
 
-/* Right Section */
-.navbar-dropdown-section {
+
+.navbar__controls {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 14px;
 }
 
-/* Dropdown */
-.domain-dropdown {
-  padding: 8px;
-  border-radius: 999px;           /* pill dropdown */
-  border: 1px solid #000;
-  background-color: #000;
-  color: #fff;
 
-  font-size: 0.95rem;
+.navbar__dropdown-wrapper {
+  position: relative;
+}
+
+
+.navbar__dropdown {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 14px;
   cursor: pointer;
   outline: none;
+  transition: all 0.2s ease;
 }
 
-/* Dropdown options */
-.domain-dropdown option {
-  background: #000;
-  color: #fff;
+.navbar__dropdown:hover {
+  background: #f3f4f6;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .navbar-container {
-    flex-direction: column;
-    gap: 12px;
-    border-radius: 20px;           /* softer pill on mobile */
-  }
+.navbar__dropdown:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
 
-  .navbar-dropdown-section {
-    width: 100%;
-    justify-content: center;
-  }
+
+.navbar__theme-toggle {
+  width: 36px;
+  height: 36px;
+  margin-right : 5px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.navbar__theme-toggle:hover {
+  background: #d1d5db;
+}
+
+
+body {
+  padding-top: 90px;
 }

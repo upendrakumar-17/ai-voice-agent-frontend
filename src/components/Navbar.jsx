@@ -9,30 +9,26 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar-container">
-      
-      {/* Header Section */}
-      <div className="navbar-header">
-        <div className="navbar-title">AI Assistant</div>
+    <div className="navbar">
+      <div className="navbar__header">
+        <div className="navbar__theme-toggle"></div>
+        <div className="navbar__title">BODHITAMINDS </div>
       </div>
 
-      {/* Dropdown Section */}
-      <div className="navbar-dropdown-section">
-        <div>
-            <select
-          className="domain-dropdown"
-          value={selectedDomain}
-          onChange={handleChange}
-        >
-          <option value="General">General</option>
-          <option value="Healthcare">Healthcare</option>
-          <option value="Finance">Finance</option>
-        </select>
+      <div className="navbar__controls">
+        <div className="navbar__dropdown-wrapper">
+          <select
+            className="navbar__dropdown"
+            value={selectedDomain}
+            onChange={handleChange}
+          >
+            <option value="General">General</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Finance">Finance</option>
+          </select>
         </div>
-        <div className='theme-button'>
 
-        </div>
-        
+        <div className="navbar__theme-toggle"></div>
       </div>
     </div>
   );
