@@ -1,0 +1,75 @@
+/* Page-safe centering */
+body {
+  margin: 0;
+  background: #fff;
+}
+
+/* Pill Navbar Container */
+.navbar-container {
+  max-width: 900px;
+  margin: 20px auto;              /* centers horizontally */
+  padding: 14px 24px;
+  background-color: #ffffff;
+  color: #000000;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 999px;           /* pill shape */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+
+  box-sizing: border-box;
+}
+
+/* Header */
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Right Section */
+.navbar-dropdown-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Dropdown */
+.domain-dropdown {
+  padding: 8px;
+  border-radius: 999px;           /* pill dropdown */
+  border: 1px solid #000;
+  background-color: #000;
+  color: #fff;
+
+  font-size: 0.95rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Dropdown options */
+.domain-dropdown option {
+  background: #000;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .navbar-container {
+    flex-direction: column;
+    gap: 12px;
+    border-radius: 20px;           /* softer pill on mobile */
+  }
+
+  .navbar-dropdown-section {
+    width: 100%;
+    justify-content: center;
+  }
+}

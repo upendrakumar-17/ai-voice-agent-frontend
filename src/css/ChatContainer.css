@@ -1,0 +1,8 @@
+.voice-container-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+background-color: #ffffff;
+color: #000000;
+
+}

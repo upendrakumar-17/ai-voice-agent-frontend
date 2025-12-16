@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Audio-Reactive Sphere of Dots</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="sphereCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById("sphereCanvas");
+const ctx = canvas.getContext("2d");
+
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+const centerX = width / 2;
+const centerY = height / 2;
+
+const radius = Math.min(width, height) / 3;
+const dotsCount = 5000;
+const dots = [];
+
+function getRandomBrightColor() {
+  const r = 128 + Math.floor(Math.random() * 128);
+  const g = 128 + Math.floor(Math.random() * 128);
+  const b = 128 + Math.floor(Math.random() * 128);
+  return `rgb(${r},${g},${b})`;
+}
+
+// Generate dots
+for (let i = 0; i < dotsCount; i++) {
+  const theta = Math.random() * 2 * Math.PI;
+  const phi = Math.acos(2 * Math.random() - 1);
+
+  const x = radius * Math.sin(phi) * Math.cos(theta);
+  const y = radius * Math.sin(phi) * Math.sin(theta);
+  const z = radius * Math.cos(phi);
+
+  let amplitudeType;
+  if (i < dotsCount / 3) {
+    amplitudeType = "MAX";      // 🔊 Strong
+  } else if (i < (2 * dotsCount) / 3) {
+    amplitudeType = "MEDIUM";   // 🟡 Moderate
+  } else {
+    amplitudeType = "ZERO";     // ⚪ No movement
+  }
+
+  dots.push({
+    x,
+    y,
+    z,
+    baseRadius: radius,
+    color: getRandomBrightColor(),
+    amplitudeType
+  });
+}
+
+// Rotation
+let angleX = 0;
+let angleY = 0;
+const speedX = 0.002;
+const speedY = 0.003;
+
+// Audio setup
+let audioAnalyser = null;
+let audioDataArray = null;
+
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+  const audioCtx = new AudioContext();
+  const source = audioCtx.createMediaStreamSource(stream);
+  audioAnalyser = audioCtx.createAnalyser();
+  audioAnalyser.fftSize = 256;
+  source.connect(audioAnalyser);
+  audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+});
+
+// Rotate 3D
+function rotate3D(dot, angleX, angleY) {
+  let cosX = Math.cos(angleX);
+  let sinX = Math.sin(angleX);
+  let y = dot.y * cosX - dot.z * sinX;
+  let z = dot.y * sinX + dot.z * cosX;
+
+  let cosY = Math.cos(angleY);
+  let sinY = Math.sin(angleY);
+  let x = dot.x * cosY + z * sinY;
+  z = -dot.x * sinY + z * cosY;
+
+  return { x, y, z };
+}
+
+// Draw loop
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+
+  let audioEnergy = 0;
+  if (audioAnalyser && audioDataArray) {
+    audioAnalyser.getByteFrequencyData(audioDataArray);
+    audioEnergy =
+      audioDataArray.reduce((a, b) => a + b, 0) / audioDataArray.length;
+  }
+
+  for (const dot of dots) {
+    let oscillationRadius = dot.baseRadius;
+
+    // 🎯 AMPLITUDE CONTROL
+    if (dot.amplitudeType === "MAX") {
+      oscillationRadius += audioEnergy * 1.2; // 🔊 Maximum push
+    }
+    else if (dot.amplitudeType === "MEDIUM") {
+      oscillationRadius += audioEnergy * 0.7; // 🟡 Moderate push
+    }
+    // ZERO → no change
+
+    // Normalize vector
+    const len = Math.sqrt(dot.x**2 + dot.y**2 + dot.z**2);
+    const scale = oscillationRadius / len;
+
+    const px = dot.x * scale;
+    const py = dot.y * scale;
+    const pz = dot.z * scale;
+
+    const rotated = rotate3D({ x: px, y: py, z: pz }, angleX, angleY);
+
+    const perspective = 400 / (400 + rotated.z);
+    const x2d = rotated.x * perspective + centerX;
+    const y2d = rotated.y * perspective + centerY;
+    const size = 2 * perspective;
+
+    ctx.beginPath();
+    ctx.arc(x2d, y2d, size, 0, Math.PI * 2);
+    ctx.fillStyle = dot.color;
+    ctx.fill();
+  }
+
+  angleX += speedX;
+  angleY += speedY;
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+window.addEventListener("resize", () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
