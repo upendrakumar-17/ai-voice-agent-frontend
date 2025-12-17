@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Message Area</title>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    }
+
+    #base {
+      width: 100%;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #maincontent {
+      width: 80%;
+      height: 100%;
+      background: white;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      #maincontent {
+        width: 100%;
+      }
+    }
+
+    #canvasbackground {
+      width: 100%;
+      height: 100%;
+      background: black;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    #content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Navbar */
+    #navbar {
+      position: absolute;
+      top: 10px;
+      height: 50px;
+      width: 100%;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      background: #ffffff;
+      border-radius: 25px;
+      box-sizing: border-box;
+    }
+
+    /* Message container fills full content height */
+    #messagecontainer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      overflow-y: auto;
+      z-index: 0;
+      display: flex;
+      justify-content: center;
+      /* center messagearea horizontally */
+      align-items: center;
+      /* center messagearea vertically */
+    }
+
+    /* Message area inside message container */
+    #messagearea {
+      width: 100%;
+      height: 95%;
+      background: #ffffff;
+      border: 1px solid black;
+      box-sizing: border-box;
+    }
+
+    /* Footer */
+    #footer {
+      position: absolute;
+      bottom: 10px;
+      height: 50px;
+      background: #d0d0d0;
+      border-radius: 25px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function App() {
+      return (
+        <div id="base">
+          <div id="maincontent">
+            <div id="canvasbackground"></div>
+            <div id="content">
+              <div id="messagecontainer">
+                <div id="messagearea"></div>
+              </div>
+
+              {/* Navbar */}
+              <div id="navbar">
+                {/* Left side: Logo + Company Name */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'black'
+                  }}></div>
+                  <span style={{ color: 'black', fontWeight: 'bold' }}>BODHITAMINDS</span>
+                </div>
+
+                {/* Right side: Select + Theme */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <select style={{ padding: '5px' }}>
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                  </select>
+                  <div style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    background: 'black'
+                  }}></div>
+                </div>
+              </div>
+
+              <div id="footer">Footer</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+
+</html>
