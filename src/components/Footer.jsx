@@ -6,41 +6,62 @@ const Footer = () => {
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <div className="footer">
-      <div className="footer__button-groups">
+    <>
+      {/* Voice Control Bar - Sticky at bottom */}
+      <div className="voice-control-bar">
+        <div className="voice-control-bar__content">
+          <button
+            className={`voice-control-bar__button ${isActive ? 'voice-control-bar__button--active' : ''}`}
+            onClick={() => setIsActive(!isActive)}
+          >
+            {isActive ? 'Stop' : 'Speak'}
+          </button>
 
-        {/* Left button (Speak / Stop) */}
-        <div className="footer__group footer__group--left">
-          {!isActive ? (
-            <button
-              className="footer__button"
-              onClick={() => setIsActive(true)}
-            >
-              Speak
-            </button>
-          ) : (
-            <button
-              className="footer__button footer__button--active"
-              onClick={() => setIsActive(false)}
-            >
-              Stop
-            </button>
-          )}
+          <div className="voice-control-bar__waveform">
+            <SiriWaveform isActive={isActive} />
+          </div>
+
+          <div className="voice-control-bar__actions">
+            <button className="voice-control-bar__action">Clear</button>
+            <button className="voice-control-bar__action">Reset</button>
+          </div>
         </div>
-
-        {/* Center - Siri Waveform */}
-        <div className="footer__waveform">
-          <SiriWaveform isActive={isActive} />
-        </div>
-
-        {/* Right buttons */}
-        <div className="footer__group footer__group--right">
-          <button className="footer__button">Clear</button>
-          <button className="footer__button">Reset</button>
-        </div>
-
       </div>
-    </div>
+
+      {/* Informational Footer */}
+      <footer className="footer-info">
+        <div className="footer-info__container">
+          <div className="footer-info__section">
+            <h3 className="footer-info__title">AI Voice Chat</h3>
+            <p className="footer-info__description">
+              Advanced AI-powered voice assistant that enhances communication with natural language processing and real-time responses.
+            </p>
+          </div>
+
+          <div className="footer-info__section">
+            <h4 className="footer-info__heading">Quick Links</h4>
+            <div className="footer-info__links">
+              <a href="#home" className="footer-info__link">Home</a>
+              <a href="#features" className="footer-info__link">Features</a>
+              <a href="#chat-section" className="footer-info__link">Try Now</a>
+              <a href="#about" className="footer-info__link">About</a>
+            </div>
+          </div>
+
+          <div className="footer-info__section">
+            <h4 className="footer-info__heading">Contact</h4>
+            <div className="footer-info__contact">
+              <p>Email: support@aivoicechat.com</p>
+              <p>Available 24/7</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-info__bottom">
+          <p>&copy; 2025 AI Voice Chat. All rights reserved.</p>
+        </div>
+      </footer>
+    </>
   );
 };
 

@@ -2,34 +2,50 @@ import React, { useState } from 'react';
 import '../css/Navbar.css';
 
 const Navbar = () => {
-  const [selectedDomain, setSelectedDomain] = useState('General');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleChange = (event) => {
-    setSelectedDomain(event.target.value);
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
   };
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="navbar__header">
-        <div className="navbar__title">BODHITAMINDS </div>
+        <h1 className="navbar__title">AI Voice Chat</h1>
+      </div>
+
+      <div className={`navbar__nav ${isMenuOpen ? 'navbar__nav--open' : ''}`}>
+        <button className="navbar__link" onClick={() => scrollToSection('home')}>
+          Home
+        </button>
+        <button className="navbar__link" onClick={() => scrollToSection('features')}>
+          Features
+        </button>
+        <button className="navbar__link" onClick={() => scrollToSection('chat-section')}>
+          Try Now
+        </button>
+        <button className="navbar__link" onClick={() => scrollToSection('about')}>
+          About
+        </button>
       </div>
 
       <div className="navbar__controls">
-        <div className="navbar__dropdown-wrapper">
-          <select
-            className="navbar__dropdown"
-            value={selectedDomain}
-            onChange={handleChange}
-          >
-            <option value="General">General</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Finance">Finance</option>
-          </select>
-        </div>
-
-        <div className="navbar__theme-toggle"></div>
+        <select className="navbar__dropdown" defaultValue="general">
+          <option value="general">General</option>
+          <option value="technical">Technical</option>
+          <option value="casual">Casual</option>
+        </select>
+        <button
+          className="navbar__menu-toggle"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? '✕' : '☰'}
+        </button>
       </div>
-    </div>
+    </nav>
   );
 };
 
