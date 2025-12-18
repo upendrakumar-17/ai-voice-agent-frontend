@@ -6,9 +6,9 @@ const About = () => {
         <section className="about" id="about">
             <div className="about__container">
                 <div className="about__content">
-                    <h2 className="about__title">How It Works</h2>
+                    <h2 className="about__title">How BodhitaMinds AI Works</h2>
                     <p className="about__description">
-                        Our AI voice assistant leverages cutting-edge technology to deliver seamless conversational experiences.
+                        Our BodhitaMinds AI voice assistant leverages cutting-edge technology to deliver seamless conversational experiences.
                     </p>
 
                     <div className="about__steps">

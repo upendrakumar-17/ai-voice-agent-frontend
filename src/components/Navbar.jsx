@@ -14,7 +14,7 @@ const Navbar = ({ isChatMode, setIsChatMode }) => {
     <nav className="navbar">
       <div className="navbar__header">
         <h1 className="navbar__title">
-          {isChatMode ? 'Voice Chat Session' : 'AI Voice Chat'}
+          {isChatMode ? 'BodhitaMinds Chat Session' : 'BodhitaMinds AI'}
         </h1>
       </div>
 

@@ -56,9 +56,9 @@ const Footer = ({ isChatMode, setIsChatMode }) => {
         <footer className="footer-info">
           <div className="footer-info__container">
             <div className="footer-info__section">
-              <h3 className="footer-info__title">AI Voice Chat</h3>
+              <h3 className="footer-info__title">BodhitaMinds AI</h3>
               <p className="footer-info__description">
-                Advanced AI-powered voice assistant that enhances communication with natural language processing and real-time responses.
+                Advanced AI-powered voice assistant by BodhitaMinds that enhances communication with natural language processing and real-time responses.
               </p>
             </div>
 
@@ -82,7 +82,7 @@ const Footer = ({ isChatMode, setIsChatMode }) => {
           </div>
 
           <div className="footer-info__bottom">
-            <p>&copy; 2025 AI Voice Chat. All rights reserved.</p>
+            <p>&copy; 2025 BodhitaMinds AI. All rights reserved.</p>
           </div>
         </footer>
       )}

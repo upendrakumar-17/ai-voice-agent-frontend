@@ -23,7 +23,7 @@ const Home = () => {
             <div className="chat-section__container">
               <h2 className="chat-section__title">Try It Now</h2>
               <p className="chat-section__subtitle">
-                Start a conversation with our AI voice assistant
+                Start a conversation with BodhitaMinds AI voice assistant
               </p>
               <ChatContainer />
             </div>
