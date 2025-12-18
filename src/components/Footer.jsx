@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
+import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
 const Footer = () => {
-  const [showButtonOne, setShowButtonOne] = useState(true);
-  const [inputValue, setInputValue] = useState('');
+  const [isActive, setIsActive] = useState(false);
 
   return (
     <div className="footer">
       <div className="footer__button-groups">
 
-        {/* Left button (Start / Stop) */}
+        {/* Left button (Speak / Stop) */}
         <div className="footer__group footer__group--left">
-          {showButtonOne ? (
+          {!isActive ? (
             <button
               className="footer__button"
-              onClick={() => setShowButtonOne(false)}
+              onClick={() => setIsActive(true)}
             >
               Speak
             </button>
           ) : (
             <button
-              className="footer__button"
-              onClick={() => setShowButtonOne(true)}
+              className="footer__button footer__button--active"
+              onClick={() => setIsActive(false)}
             >
               Stop
             </button>
           )}
         </div>
 
+        {/* Center - Siri Waveform */}
+        <div className="footer__waveform">
+          <SiriWaveform isActive={isActive} />
+        </div>
 
         {/* Right buttons */}
         <div className="footer__group footer__group--right">

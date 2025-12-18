@@ -2,7 +2,7 @@
   margin: 0 auto 24px;
   width: 90%;
   max-width: 900px;
-  padding: 18px 28px;
+  padding: 12px 24px;
 
   /* Glassmorphism matching navbar */
   background: rgba(255, 255, 255, 0.85);
@@ -31,7 +31,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .footer__group {
@@ -40,7 +40,7 @@
 }
 
 .footer__button {
-  padding: 10px 20px;
+  padding: 8px 18px;
   border-radius: 12px;
   border: 1px solid rgba(139, 92, 246, 0.15);
   background: rgba(139, 92, 246, 0.05);
@@ -60,6 +60,28 @@
 
 .footer__button:active {
   transform: translateY(0);
+}
+
+.footer__button--active {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  color: #ffffff;
+  border-color: rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+.footer__button--active:hover {
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+}
+
+/* Siri Waveform in center */
+.footer__waveform {
+  flex-grow: 1;
+  max-width: 400px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .footer__center-text {
