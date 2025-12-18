@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Button Menu on Click</title>
+<style>
+  /* Menu container */
+  .menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Hidden buttons container */
+  .menu-content {
+    display: none; /* hidden by default */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    padding: 10px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* Style for buttons */
+  .menu-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+
+  /* Hover effect for buttons */
+  .menu-content button:hover {
+    background-color: #f1f1f1;
+  }
+</style>
+</head>
+<body>
+
+<div class="menu">
+  <button id="menuButton">^</button>
+  <div class="menu-content" id="menuContent">
+    <button class="menu-item" >Button 1</button>
+    <button class="menu-item" onclick="console.log('Button 2 clicked')">Button 2</button>
+  </div>
+</div>
+
+<script>
+  const menuButton = document.getElementById('menuButton');
+  const menuContent = document.getElementById('menuContent');
+
+  // Toggle menu visibility on click
+  menuButton.addEventListener('click', () => {
+    menuContent.style.display = menuContent.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Close menu when clicking outside
+  window.addEventListener('click', (event) => {
+    if (!menuButton.contains(event.target) && !menuContent.contains(event.target)) {
+      menuContent.style.display = 'none';
+    }
+  });
+
+  // Close menu when any button inside menu is clicked
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      menuContent.style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>

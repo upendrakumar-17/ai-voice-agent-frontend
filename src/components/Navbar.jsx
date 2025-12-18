@@ -11,7 +11,6 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navbar__header">
-        <div className="navbar__theme-toggle"></div>
         <div className="navbar__title">BODHITAMINDS </div>
       </div>
 

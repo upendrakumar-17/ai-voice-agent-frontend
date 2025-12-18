@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ChatMessages from './ChatMessages';
+import '../css/ChatContainer.css';
 
 const App = () => {
   const [messages, setMessages] = useState([
@@ -34,8 +35,12 @@ const App = () => {
   //const[messages, setMessages] = useState([]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <ChatMessages messages={messages} />
+    <div className="baap">
+      <div className="chat-panel">
+        <div className="chat-content">
+          <ChatMessages messages={messages} />
+        </div>
+      </div>
     </div>
   );
 };

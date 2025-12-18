@@ -28,16 +28,6 @@ const Footer = () => {
           )}
         </div>
 
-        {/* Center text input */}
-        <div className="footer__center-text">
-          <input
-            type="text"
-            className="footer__input"
-            placeholder="Type here..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-        </div>
 
         {/* Right buttons */}
         <div className="footer__group footer__group--right">

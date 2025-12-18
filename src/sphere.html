@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Audio-Reactive Sphere of Dots</title>
+  <title>Small Audio-Reactive Sphere</title>
   <style>
     body {
       margin: 0;
@@ -22,21 +22,19 @@
 const canvas = document.getElementById("sphereCanvas");
 const ctx = canvas.getContext("2d");
 
-//let width = canvas.width = window.innerWidth;
-//let height = canvas.height = window.innerHeight;
- canvas.height = window.innerHeight;
- canvas.width = window.innerWidth;
+// Full canvas dimensions
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-let width=200;
-let height=200;
-
-
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
-
-const radius = Math.min(width, height) / 3;
-const dotsCount = 1000;
+// Sphere properties
+const radius = 30; // ~1cm in pixels
+const dotsCount = 150; // more dots to make small sphere look fuller
 const dots = [];
+
+const centerX = width / 2;
+const centerY = height / 2;
+
+const MAX_RADIUS = radius * 1.75; // Maximum allowed displacement from center
 
 function getRandomBrightColor() {
   const r = 128 + Math.floor(Math.random() * 128);
@@ -54,34 +52,12 @@ for (let i = 0; i < dotsCount; i++) {
   const y = radius * Math.sin(phi) * Math.sin(theta);
   const z = radius * Math.cos(phi);
 
-  // let amplitudeType;
-  // if (i < (dotsCount) / 5) {
-  //   amplitudeType = "MAX";      // 🔊 Strong
-  // } else if (i < (2 * dotsCount) / 5) {
-  //   amplitudeType = "MEDIUM";   // 🟡 Moderate
-  // } else {
-  //   amplitudeType = "ZERO";     // ⚪ No movement
-  // }
-
   let amplitudeType;
+  if (i < (3 * dotsCount) / 6) amplitudeType = "MAX";
+  else if (i < (5 * dotsCount) / 6) amplitudeType = "MEDIUM";
+  else amplitudeType = "ZERO";
 
-if (i < (3 * dotsCount) / 6) {
-    amplitudeType = "MAX";   // 🔊 Strong
-} else if (i < (5 * dotsCount) / 6) { // 3+2=5 parts
-    amplitudeType = "MEDIUM"; // 🟡 Moderate
-} else {
-    amplitudeType = "ZERO";  // ⚪ No movement
-}
-
-
-  dots.push({
-    x,
-    y,
-    z,
-    baseRadius: radius,
-    color: getRandomBrightColor(),
-    amplitudeType
-  });
+  dots.push({ x, y, z, baseRadius: radius, color: getRandomBrightColor(), amplitudeType });
 }
 
 // Rotation
@@ -125,24 +101,21 @@ function draw() {
   let audioEnergy = 0;
   if (audioAnalyser && audioDataArray) {
     audioAnalyser.getByteFrequencyData(audioDataArray);
-    audioEnergy =
-      audioDataArray.reduce((a, b) => a + b, 0) / audioDataArray.length;
+    audioEnergy = audioDataArray.reduce((a, b) => a + b, 0) / audioDataArray.length;
   }
 
   for (const dot of dots) {
     let oscillationRadius = dot.baseRadius;
 
-    // 🎯 AMPLITUDE CONTROL
+    // AMPLITUDE CONTROL
     if (dot.amplitudeType === "MAX") {
-      oscillationRadius += audioEnergy * 0.9; // 🔊 Maximum push
-    }
-    else if (dot.amplitudeType === "MEDIUM") {
-      oscillationRadius += audioEnergy * 0.6; // 🟡 Moderate push
-    }
-    // ZERO → no change
-    else{
-      oscillationRadius += audioEnergy * 0.3; // 🟡 Moderate push
-    }
+      oscillationRadius += audioEnergy * 0.9;
+    } else if (dot.amplitudeType === "MEDIUM") {
+      oscillationRadius += audioEnergy * 0.6;
+    } // ZERO → no movement, already baseRadius
+
+    // LIMIT MAX DISPLACEMENT
+    if (oscillationRadius > MAX_RADIUS) oscillationRadius = MAX_RADIUS;
 
     // Normalize vector
     const len = Math.sqrt(dot.x**2 + dot.y**2 + dot.z**2);
@@ -157,7 +130,7 @@ function draw() {
     const perspective = 400 / (400 + rotated.z);
     const x2d = rotated.x * perspective + centerX;
     const y2d = rotated.y * perspective + centerY;
-    const size = 2 * perspective;
+    const size = 2.5 * perspective; // slightly bigger dots
 
     ctx.beginPath();
     ctx.arc(x2d, y2d, size, 0, Math.PI * 2);

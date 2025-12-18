@@ -1,0 +1,538 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AI</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu;
+            background: radial-gradient(circle at 20% 20%, #4b4b4b, #000000);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* padding: 10px; */
+            color: #2c4c91;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            min-height: 100vh;
+            /* background: rgba(255, 255, 255, 0.2); */
+            backdrop-filter: blur(15px) saturate(180%);
+            /* background: #ffffffdd; */
+            backdrop-filter: blur(10px);
+            /* border: 1px solid #ffffff44; */
+            /* border-radius: 26px; */
+            box-shadow: 0 20px 40px -8px rgba(19, 15, 64, .25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #000000 50%, #000000 100%);
+            border-radius: 50px;
+            /* border-top-left-radius : 50px; */
+            /* border-top-right-radius : 50px; */
+            color: #fff;
+            z-index: 10;
+        }
+
+        .header h1 {
+            align-items: center;
+            margin-left: 5px;
+            font-size: 25px;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .status-bar {
+            background: #fff;
+            border-bottom: 1px solid #e4e7ef;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #6c757d;
+        }
+
+        .status-indicator.listening {
+            background: #28a745;
+        }
+
+        .status-indicator.processing {
+            background: #ffb400;
+        }
+
+        .status-indicator.speaking {
+            background: #17a2b8;
+        }
+
+        .chat-container {
+            margin-top: -35px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 26px 34px;
+            backdrop-filter: blur(55px) saturate(200%);
+
+            /* background: #ffffffdd; */
+            backdrop-filter: blur(20px);
+            /* background: linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%); */
+        }
+
+        .chat-container {
+            margin-top: -35px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 26px 34px;
+
+            /* Frosted glass effect */
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+
+            /* Semi-transparent overlay to enhance glassiness */
+            background-color: rgba(255, 255, 255, 0.2);
+            /* adjust alpha for more/less glassiness */
+
+            /* border-radius: 20px; */
+            /* optional: rounded edges make glass effect more visible */
+            /* border: 1px solid rgba(255, 255, 255, 0.3); */
+            /* subtle outline enhances glass effect */
+        }
+
+        .message {
+            margin-bottom: 18px;
+        }
+
+        .message-bubble {
+            padding: 14px 18px;
+            border-radius: 18px;
+            line-height: 1.55;
+            max-width: 780px;
+            font-size: 14px;
+            background: #fff;
+            border: 1px solid #e6e9ef;
+            box-shadow: 0 4px 14px -4px rgba(33, 40, 62, .18);
+        }
+
+        .user-message .message-bubble {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: 1px solid #5d68db;
+        }
+
+        .controls {
+            background: #fff;
+            border-top: 1px solid #e4e7ef;
+            padding: 10px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            font-size: 12.5px;
+            padding: 9px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        /* #domainSelect {
+            padding: 10px 10px;
+            border: none; */
+        /* border: 1px solid #e0e4ec; */
+        /* border-radius: 50px;
+            background-color: #b4b4b4;
+            font-size: 15px;
+            box-shadow: #ffffff
+        } */
+        #domainSelect {
+            padding: 10px 10px;
+            /* more breathing room */
+            border: none;
+            border-radius: 50px;
+            /* pill shape */
+            background: linear-gradient(135deg, #6cc1ff, #3a8dde);
+            /* lively gradient */
+            color: #fff;
+            /* text color */
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            /* soft shadow for depth */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* smooth hover effects */
+            outline: none;
+        }
+
+        /* Hover effect */
+        #domainSelect:hover {
+            background: linear-gradient(135deg, #3a8cde50, #6cc2ff89);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            /* subtle lift */
+        }
+
+        /* Focus effect */
+        #domainSelect:focus {
+            box-shadow: 0 0 0 3px rgba(60, 140, 222, 0.3);
+        }
+
+        .container {
+            position: relative;
+        }
+
+        /* Sphere container floats above the controls at the bottom */
+        #sphereContainer {
+            position: absolute;
+            bottom: 0px;
+            /* adjust depending on your controls height */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            /* size of your sphere */
+            height: 100px;
+            pointer-events: none;
+            /* optional: allows clicks to pass through */
+            z-index: 10;
+            /* ensure it’s above other elements */
+        }
+
+        /* Optional: make canvas fill container */
+        #sphereCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BodhitaMinds AI</h1>
+            <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+
+                <label for="domainSelect"></label>
+                <select id="domainSelect">
+                    <option value="normal">GENERAL</option>
+                    <option value="healthcare">HEALTHCARE</option>
+                    <option value="finance">FINANCE</option>
+                </select>
+
+            </div>
+        </div>
+
+        <!-- <div class="status-bar">
+
+        </div> -->
+
+        <div class="chat-container" id="chatContainer"></div>
+        <div class="controls">
+            <div class="button-group">
+                <div class="button-group-2">
+                    <button id="startBtn" class="btn">Start</button>
+                    <button id="stopBtn" class="btn" disabled>Stop</button>
+                </div>
+
+                <div class="button-group-2">
+                    <button id="clearBtn" class="btn">Clear</button>
+                    <button id="resetBtn" class="btn">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="agent" id="sphereContainer">
+            <canvas id="sphereCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById("sphereContainer");
+        const canvas = document.getElementById("sphereCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Match canvas to container size
+        let width = canvas.width = container.clientWidth;
+        let height = canvas.height = container.clientHeight;
+
+        const radius = 20;
+        const dotsCount = 100;
+        const dots = [];
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const MAX_RADIUS = radius * 1.75;
+
+        function getRandomBrightColor() {
+            const r = 128 + Math.floor(Math.random() * 128);
+            const g = 128 + Math.floor(Math.random() * 128);
+            const b = 128 + Math.floor(Math.random() * 128);
+            return `rgb(${r},${g},${b})`;
+        }
+
+        // Generate dots
+        for (let i = 0; i < dotsCount; i++) {
+            const theta = Math.random() * 2 * Math.PI;
+            const phi = Math.acos(2 * Math.random() - 1);
+
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.sin(phi) * Math.sin(theta);
+            const z = radius * Math.cos(phi);
+
+            let amplitudeType;
+            if (i < (3 * dotsCount) / 6) amplitudeType = "MAX";
+            else if (i < (5 * dotsCount) / 6) amplitudeType = "MEDIUM";
+            else amplitudeType = "ZERO";
+
+            dots.push({ x, y, z, baseRadius: radius, color: getRandomBrightColor(), amplitudeType });
+        }
+
+        // Rotation
+        let angleX = 0;
+        let angleY = 0;
+        const speedX = 0.002;
+        const speedY = 0.003;
+
+        // Audio setup
+        let audioAnalyser = null;
+        let audioDataArray = null;
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            const audioCtx = new AudioContext();
+            const source = audioCtx.createMediaStreamSource(stream);
+            audioAnalyser = audioCtx.createAnalyser();
+            audioAnalyser.fftSize = 256;
+            source.connect(audioAnalyser);
+            audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+        });
+
+        function rotate3D(dot, angleX, angleY) {
+            let cosX = Math.cos(angleX);
+            let sinX = Math.sin(angleX);
+            let y = dot.y * cosX - dot.z * sinX;
+            let z = dot.y * sinX + dot.z * cosX;
+
+            let cosY = Math.cos(angleY);
+            let sinY = Math.sin(angleY);
+            let x = dot.x * cosY + z * sinY;
+            z = -dot.x * sinY + z * cosY;
+
+            return { x, y, z };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            let audioEnergy = 0;
+            if (audioAnalyser && audioDataArray) {
+                audioAnalyser.getByteFrequencyData(audioDataArray);
+                audioEnergy = audioDataArray.reduce((a, b) => a + b, 0) / audioDataArray.length;
+            }
+
+            for (const dot of dots) {
+                let oscillationRadius = dot.baseRadius;
+
+                if (dot.amplitudeType === "MAX") oscillationRadius += audioEnergy * 0.9;
+                else if (dot.amplitudeType === "MEDIUM") oscillationRadius += audioEnergy * 0.6;
+
+                if (oscillationRadius > MAX_RADIUS) oscillationRadius = MAX_RADIUS;
+
+                const len = Math.sqrt(dot.x ** 2 + dot.y ** 2 + dot.z ** 2);
+                const scale = oscillationRadius / len;
+
+                const px = dot.x * scale;
+                const py = dot.y * scale;
+                const pz = dot.z * scale;
+
+                const rotated = rotate3D({ x: px, y: py, z: pz }, angleX, angleY);
+
+                const perspective = 400 / (400 + rotated.z);
+                const x2d = rotated.x * perspective + centerX;
+                const y2d = rotated.y * perspective + centerY;
+                const size = 2.5 * perspective;
+
+                ctx.beginPath();
+                ctx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                ctx.fillStyle = dot.color;
+                ctx.fill();
+            }
+
+            angleX += speedX;
+            angleY += speedY;
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = container.clientWidth;
+            height = canvas.height = container.clientHeight;
+        });
+    </script>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const chatContainer = document.getElementById('chatContainer');
+        const domainSelect = document.getElementById('domainSelect');
+
+        let selectedDomain = localStorage.getItem('selected_domain') || 'normal';
+        domainSelect.value = selectedDomain;
+        domainSelect.addEventListener('change', () => {
+            selectedDomain = domainSelect.value;
+            localStorage.setItem('selected_domain', selectedDomain);
+        });
+
+        function updateStatus(state, text) {
+            statusText.textContent = text;
+            statusIndicator.className = 'status-indicator ' + state;
+        }
+
+        function addMessage(role, content) {
+            const div = document.createElement('div');
+            div.className = `message ${role}-message`;
+            div.innerHTML = `<div class="message-bubble">${content}</div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        let currentAudio = null;
+
+        async function speakText(text) {
+            if (currentAudio) currentAudio.pause();
+            try {
+                const res = await fetch('/api/tts/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                    body: JSON.stringify({ text })
+                });
+                if (!res.ok) throw new Error('TTS failed');
+                const data = await res.json();
+                if (data.audio) {
+                    const blob = base64ToBlob(data.audio, 'audio/wav');
+                    const url = URL.createObjectURL(blob);
+                    currentAudio = new Audio(url);
+                    currentAudio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; };
+                    currentAudio.playbackRate = 1.1;
+                    await currentAudio.play();
+                }
+            } catch (e) {
+                console.error('TTS error:', e);
+            }
+        }
+
+        function base64ToBlob(base64, type) {
+            const bytes = atob(base64);
+            const arr = new Uint8Array(bytes.length);
+            for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+            return new Blob([arr], { type });
+        }
+
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) {
+                const [k, v] = c.trim().split('=');
+                if (k === name) return decodeURIComponent(v);
+            }
+            return null;
+        }
+
+        async function sendTextToServer(text) {
+            updateStatus('processing', 'AI thinking...');
+            try {
+                const res = await fetch("{% url 'api_ask' %}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, domain: selectedDomain })
+                });
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let full = '', aiDiv = null;
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    const parts = decoder.decode(value, { stream: true }).split(/\r?\n\r?\n/).filter(Boolean);
+                    for (const p of parts) {
+                        try {
+                            const obj = JSON.parse(p.replace(/^data:\s*/, ''));
+                            if (obj.chunk) {
+                                if (!aiDiv) { addMessage('ai', '...'); aiDiv = chatContainer.lastElementChild.querySelector('.message-bubble'); }
+                                full += obj.chunk;
+                                if (aiDiv) aiDiv.textContent = full;
+                            } else if (obj.done && !aiDiv) {
+                                addMessage('ai', full);
+                            }
+                        } catch (e) { }
+                    }
+                }
+                if (full) speakText(full);
+                updateStatus('idle', 'Ready');
+            } catch (e) {
+                addMessage('ai', 'Error: ' + e.message);
+                updateStatus('idle', 'Ready');
+            }
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.onstart = () => { updateStatus('listening', 'Listening...'); startBtn.disabled = true; stopBtn.disabled = false; };
+        recognition.onresult = (e) => { const text = e.results[0][0].transcript; addMessage('user', text); sendTextToServer(text); };
+        recognition.onend = () => { updateStatus('idle', 'Ready'); startBtn.disabled = false; stopBtn.disabled = true; };
+
+        startBtn.addEventListener('click', () => recognition.start());
+        stopBtn.addEventListener('click', () => recognition.stop());
+        clearBtn.addEventListener('click', () => chatContainer.innerHTML = '');
+        resetBtn.addEventListener('click', async () => {
+            await fetch("{% url 'reset_context' %}", { method: 'POST' });
+            chatContainer.innerHTML = '';
+        });
+    </script>
+</body>
+
+</html>

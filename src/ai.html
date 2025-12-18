@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bodhita Minds Voice Assistant</title>
+    <style>
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        /* Root container */
+        #voiceAppRoot {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main container */
+        #voiceAppContainer {
+            width: 70%;
+            height: 95%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navbar */
+        #voiceNavbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #ffffff; /* white background */
+            color: #000000; /* black text */
+            border-radius: 50px; /* pill shape */
+            margin: 16px; /* some space from edges */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        #navbarCompany {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #companyLogo {
+            width: 40px;
+            height: 40px;
+            background: #374151;
+            border-radius: 6px;
+        }
+
+        #companyName {
+            font-size: 18px;
+            margin: 0;
+            color: #000000; /* ensure text black */
+        }
+
+        #domainSelectorWrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #domainSelect {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: #000000;
+        }
+
+        /* 3-dot dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        #menuBtn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 100px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            z-index: 20;
+            flex-direction: column;
+        }
+
+        .dropdown-content .btn {
+            width: 100%;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            color: #000000;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .dropdown-content .btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Chat area */
+        #chatContainer {
+            flex: 1;
+            position: relative;
+            padding: 16px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Message area fills remaining space */
+        #chatMessages {
+            flex: 1;
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px;
+            color: #374151;
+            overflow-y: auto;
+            background-color: black;
+        }
+
+        /* Avatar floating at bottom center */
+        #chatAvatar {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.15);
+            z-index: 10;
+            background: transparent;
+        }
+
+        #avatarCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #voiceAppContainer {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+
+            #chatAvatar {
+                width: 90px;
+                height: 90px;
+            }
+
+            #chatMessages {
+                margin-bottom: 100px;
+            }
+
+            #voiceNavbar {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #companyName {
+                font-size: 14px;
+            }
+
+            #domainSelect {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="voiceAppRoot">
+        <div id="voiceAppContainer">
+
+            <!-- Navbar -->
+            <div id="voiceNavbar">
+                <div id="navbarCompany">
+                    <div id="companyLogo">BM</div>
+                    <h1 id="companyName">Bodhita Minds AI</h1>
+                </div>
+                <div id="domainSelectorWrapper">
+                    <label for="domainSelect">Domain</label>
+                    <select id="domainSelect">
+                        <option>General</option>
+                        <option>Healthcare</option>
+                        <option>Finance</option>
+                    </select>
+                </div>
+
+                <!-- 3-dot dropdown menu -->
+                <div class="dropdown">
+                    <button id="menuBtn">⋮</button>
+                    <div id="dropdownContent" class="dropdown-content">
+                        <button id="clearBtn" class="btn">🗑️ Clear</button>
+                        <button id="resetBtn" class="btn">♻️ Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat -->
+            <div id="chatContainer">
+                <div id="chatMessages">
+                    Chat messages will appear here. The avatar is now at the bottom center.
+                </div>
+                <div id="chatAvatar">
+                    <canvas id="avatarCanvas"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // === Dropdown menu logic ===
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownContent = document.getElementById('dropdownContent');
+
+        menuBtn.addEventListener('click', () => {
+            dropdownContent.style.display = dropdownContent.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+
+        // === Sphere inside avatar ===
+        const canvas = document.getElementById("avatarCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let width = canvas.width = canvas.clientWidth;
+        let height = canvas.height = canvas.clientHeight;
+
+        const radius = 30;
+        const dotsCount = 150;
+        const dots = [];
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const MAX_RADIUS = radius * 1.75;
+
+        function getRandomBrightColor() {
+            const r = 128 + Math.floor(Math.random() * 128);
+            const g = 128 + Math.floor(Math.random() * 128);
+            const b = 128 + Math.floor(Math.random() * 128);
+            return `rgb(${r},${g},${b})`;
+        }
+
+        for (let i = 0; i < dotsCount; i++) {
+            const theta = Math.random() * 2 * Math.PI;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.sin(phi) * Math.sin(theta);
+            const z = radius * Math.cos(phi);
+            let amplitudeType = (i < 0.5 * dotsCount) ? "MAX" : (i < 0.833 * dotsCount) ? "MEDIUM" : "ZERO";
+            dots.push({ x, y, z, baseRadius: radius, color: getRandomBrightColor(), amplitudeType });
+        }
+
+        let angleX = 0, angleY = 0;
+        const speedX = 0.002, speedY = 0.003;
+
+        let audioAnalyser = null;
+        let audioDataArray = null;
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            const audioCtx = new AudioContext();
+            const source = audioCtx.createMediaStreamSource(stream);
+            audioAnalyser = audioCtx.createAnalyser();
+            audioAnalyser.fftSize = 256;
+            source.connect(audioAnalyser);
+            audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+        });
+
+        function rotate3D(dot, angleX, angleY) {
+            let cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+            let y = dot.y * cosX - dot.z * sinX;
+            let z = dot.y * sinX + dot.z * cosX;
+            let cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+            let x = dot.x * cosY + z * sinY;
+            z = -dot.x * sinY + z * cosY;
+            return { x, y, z };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            let audioEnergy = 0;
+            if (audioAnalyser && audioDataArray) {
+                audioAnalyser.getByteFrequencyData(audioDataArray);
+                audioEnergy = audioDataArray.reduce((a, b) => a + b, 0) / audioDataArray.length;
+            }
+
+            for (const dot of dots) {
+                let oscillationRadius = dot.baseRadius;
+                if (dot.amplitudeType === "MAX") oscillationRadius += audioEnergy * 0.9;
+                else if (dot.amplitudeType === "MEDIUM") oscillationRadius += audioEnergy * 0.6;
+                if (oscillationRadius > MAX_RADIUS) oscillationRadius = MAX_RADIUS;
+
+                const len = Math.sqrt(dot.x ** 2 + dot.y ** 2 + dot.z ** 2);
+                const scale = oscillationRadius / len;
+                const px = dot.x * scale;
+                const py = dot.y * scale;
+                const pz = dot.z * scale;
+
+                const rotated = rotate3D({ x: px, y: py, z: pz }, angleX, angleY);
+                const perspective = 400 / (400 + rotated.z);
+                const x2d = rotated.x * perspective + centerX;
+                const y2d = rotated.y * perspective + centerY;
+                const size = 2.5 * perspective;
+
+                ctx.beginPath();
+                ctx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                ctx.fillStyle = dot.color;
+                ctx.fill();
+            }
+
+            angleX += speedX;
+            angleY += speedY;
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = canvas.clientWidth;
+            height = canvas.height = canvas.clientHeight;
+        });
+    </script>
+
+</body>
+
+</html>
