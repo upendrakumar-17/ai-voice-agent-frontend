@@ -37,6 +37,25 @@ html {
   text-align: center;
 }
 
+/* Full-Screen Chat Mode */
+.chat-fullscreen {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 120px;
+  background: linear-gradient(135deg, #f8f7ff 0%, #ffffff 100%);
+}
+
+.chat-fullscreen__container {
+  width: 100%;
+  max-width: 1200px;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .chat-section {
     padding: 60px 20px;
@@ -44,5 +63,13 @@ html {
 
   .chat-section__title {
     font-size: 2rem;
+  }
+
+  .chat-fullscreen {
+    padding: 80px 20px 120px;
+  }
+
+  .chat-fullscreen__container {
+    height: 70vh;
   }
 }

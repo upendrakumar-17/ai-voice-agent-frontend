@@ -47,6 +47,25 @@
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
 }
 
+.voice-control-bar__exit {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.05);
+  color: #6b21a8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.voice-control-bar__exit:hover {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateX(-2px);
+}
+
 .voice-control-bar__waveform {
   flex: 1;
   max-width: 500px;
