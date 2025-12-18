@@ -4,35 +4,20 @@ import '../css/ChatContainer.css';
 
 const App = () => {
   const [messages, setMessages] = useState([
-    { text: 'Hello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbcllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbjdbcjzdbcjhzdbczdhjcbzjd', type: 'incoming' },
-    { text: 'Hi,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbwadyetfvruygbansoicnsoxmaodmoehfrusbfudcbaubd how are you?', type: 'outgoing' },
-    { text: 'HelloHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjx!', type: 'incoming' },
-    { text: 'Hi, how are yi,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidou?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, hoi,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidw are you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, how ai,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidre you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, how ai,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidre you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, how ai,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidre you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, how i,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidare you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hi, how i,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidare you?', type: 'outgoing' },
-    { text: 'HeHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxllo!', type: 'incoming' },
-    { text: 'Hi, how i,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidare you?', type: 'outgoing' },
-    { text: 'HeHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxllo!', type: 'incoming' },
-    { text: 'Hi, how i,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidare you?', type: 'outgoing' },
-    { text: 'HelHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxlo!', type: 'incoming' },
-    { text: 'Hii,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcid, how are you?', type: 'outgoing' },
-    { text: 'HellHello!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcidsbvhjzdb dsbcidbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxo!', type: 'incoming' },
-    { text: 'Hii,dhvbhdjv hdjvbjhdbvjzbczkscsihdwaiodkjbeufbrgfhjfbllo!vnbjkxjvbfxjbvhjfbvhjfbvjxdbvjbfvjbfjvbdhjvbzdubvckjdcjzdbcid, how are you?', type: 'outgoing' },
-
+    { text: 'Hello! How can I assist you today?', type: 'incoming' },
+    { text: 'Hi! Can you help me understand how AI voice assistants work?', type: 'outgoing' },
+    { text: 'Of course! AI voice assistants use natural language processing to understand your speech, convert it to text, process your request, and provide helpful responses.', type: 'incoming' },
+    { text: 'That sounds fascinating! What technologies are involved?', type: 'outgoing' },
+    { text: 'The main components include speech recognition, natural language understanding, dialog management, and text-to-speech synthesis. Modern systems use deep learning models for accuracy.', type: 'incoming' },
+    { text: 'How accurate are they these days?', type: 'outgoing' },
+    { text: 'Today\'s voice assistants achieve over 95% accuracy in ideal conditions. They continue to improve with more training data and advanced neural networks.', type: 'incoming' },
+    { text: 'Can they understand different accents?', type: 'outgoing' },
+    { text: 'Yes! Modern AI models are trained on diverse datasets including various accents, languages, and speaking styles to ensure inclusivity and accuracy.', type: 'incoming' },
+    { text: 'What about privacy concerns?', type: 'outgoing' },
+    { text: 'Privacy is crucial. Reputable systems process data securely, offer opt-out options, and provide transparency about data usage. Always review privacy policies.', type: 'incoming' },
+    { text: 'Thank you for the detailed explanation!', type: 'outgoing' },
+    { text: 'You\'re welcome! Feel free to ask if you have more questions.', type: 'incoming' },
   ]);
-
-
-  //const[messages, setMessages] = useState([]);
 
   return (
     <div className="baap">
