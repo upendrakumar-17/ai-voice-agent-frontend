@@ -1,5 +1,4 @@
-/* Live transcription style */
-.chat-message.live {
+/* .chat-message.live {
     font-style: italic;
     opacity: 0.8;
     animation: pulse 1.5s infinite ease-in-out;
@@ -17,4 +16,4 @@
     100% {
         opacity: 0.6;
     }
-}
+} */

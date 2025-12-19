@@ -1,10 +1,9 @@
 import React from 'react';
 import '../css/Hero.css';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
-    const scrollToChat = () => {
-        document.getElementById('chat-section')?.scrollIntoView({ behavior: 'smooth' });
-    };
+    const navigate = useNavigate();
 
     return (
         <section className="hero" id="home">
@@ -17,7 +16,7 @@ const Hero = () => {
                     Experience natural conversations powered by advanced AI from BodhitaMinds.
                     Speak freely and get intelligent responses in real-time.
                 </p>
-                <button className="hero__cta" onClick={scrollToChat}>
+                <button className="hero__cta" onClick={() => navigate('/chat')}>
                     Try it now →
                 </button>
             </div>

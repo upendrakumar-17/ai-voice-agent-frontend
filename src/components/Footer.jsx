@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isRecording, onToggleRecording }) => {
+const Footer = ({ isRecording, onToggleRecording}) => {
+  
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const Footer = ({ isRecording, onToggleRecording }) => {
   return (
     <>
       {/* Voice Control Bar - Sticky at bottom */}
+      <>{isChatMode && (
       <div className="voice-control-bar">
         <div className="voice-control-bar__content">
           <div className="voice-control-bar__left-controls">
@@ -71,8 +73,9 @@ const Footer = ({ isRecording, onToggleRecording }) => {
           </div>
         </div>
       </div>
+      )}</>
 
-      {/* Informational Footer - Hidden in chat mode */}
+      {/* Informational Footer - Hidden in chat mode
       {!isChatMode && (
         <footer className="footer-info">
           <div className="footer-info__container">
@@ -106,7 +109,7 @@ const Footer = ({ isRecording, onToggleRecording }) => {
             <p>&copy; 2025 BodhitaMinds AI. All rights reserved.</p>
           </div>
         </footer>
-      )}
+      )} */}
     </>
   );
 };

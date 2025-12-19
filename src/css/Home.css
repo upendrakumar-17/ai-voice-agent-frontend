@@ -6,9 +6,9 @@
   flex-direction: column;
 }
 
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 /* Chat Section (Landing Page) */
 .chat-section {

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import '../css/Navbar.css';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [isNavSectionMenuOpen, setIsNavSectionMenuOpen] = useState(false);
+  const [themeButton, setThemeButton] = useState('light');
   const location = useLocation();
-  const navigate = useNavigate();
   const isChatMode = location.pathname === '/chat';
 
   const scrollToSection = (sectionId) => {
     if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTo: sectionId } }); // Handle cross-page navigation if needed, or just navigate to home
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -19,19 +20,19 @@ const Navbar = () => {
       const element = document.getElementById(sectionId);
       element?.scrollIntoView({ behavior: 'smooth' });
     }
-    setIsMenuOpen(false);
+    setIsNavSectionMenuOpen(false);
   };
 
   return (
     <nav className="navbar">
       <div className="navbar__header">
         <h1 className="navbar__title">
-          {isChatMode ? 'BodhitaMinds Chat Session' : 'BodhitaMinds AI'}
+          {isChatMode ? 'BodhitaMindsAI' : 'BodhitaMinds AI'}
         </h1>
       </div>
 
       {!isChatMode && (
-        <div className={`navbar__nav ${isMenuOpen ? 'navbar__nav--open' : ''}`}>
+        <div className={`navbar__nav ${isNavSectionMenuOpen ? 'navbar__nav--open' : ''}`}>
           <button className="navbar__link" onClick={() => scrollToSection('home')}>
             Home
           </button>
@@ -59,15 +60,27 @@ const Navbar = () => {
         {!isChatMode && (
           <button
             className="navbar__menu-toggle"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsNavSectionMenuOpen(!isNavSectionMenuOpen)}
             aria-label="Toggle menu"
           >
-            {isMenuOpen ? '✕' : '☰'}
+            {isNavSectionMenuOpen ? '✕' : '☰'}
           </button>
         )}
+
+        <button
+          className="navbar__theme-toggle"
+          onClick={() => setThemeButton(themeButton === 'light' ? 'dark' : 'light')}
+          aria-label="Toggle theme"
+        >
+          {themeButton === 'light' ? <FaMoon /> : <FaSun />}
+        </button>
+
       </div>
+
     </nav>
   );
 };
 
+
 export default Navbar;
+

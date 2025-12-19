@@ -100,17 +100,40 @@
   background: rgba(139, 92, 246, 0.15);
 }
 
+.navbar__theme-toggle {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(139, 92, 246, 0.05);
+  color: #7c3aed;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.navbar__theme-toggle:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-1px);
+}
+
 @media (max-width: 768px) {
   .navbar__nav {
     position: fixed;
     top: 72px;
     left: 0;
-    right: 0;
+    margin-right: 30px;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
     padding: 20px;
-    gap: 12px;
+    gap: 10px;
     border-bottom: 1px solid rgba(139, 92, 246, 0.1);
     box-shadow: 0 8px 24px rgba(139, 92, 246, 0.08);
     transform: translateY(-100%);

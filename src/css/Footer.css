@@ -107,15 +107,6 @@
   background: rgba(139, 92, 246, 0.12);
 }
 
-/* Informational Footer */
-.footer-info {
-  background: #1a1a1a;
-  color: #ffffff;
-  padding: 60px 20px 20px;
-  margin-bottom: 90px;
-  /* Space for sticky voice bar */
-}
-
 .footer-info__container {
   max-width: 1200px;
   margin: 0 auto;
