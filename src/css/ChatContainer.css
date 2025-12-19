@@ -1,11 +1,12 @@
 .baap {
   width: 90%;
   max-width: 900px;
-  height: auto;
-  max-height: 60vh;
+  height: 100%;
+  /* Fill the container */
   display: flex;
   flex-direction: column;
   margin: 20px auto;
+  /* Removing bottom margin to sit flush with padding of container */
 
   /* Glassmorphism with white theme */
   background: rgba(255, 255, 255, 0.85);

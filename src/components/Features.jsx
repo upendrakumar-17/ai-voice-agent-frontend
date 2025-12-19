@@ -1,35 +1,36 @@
 import React from 'react';
 import '../css/Features.css';
+import { FaMicrophone, FaComments, FaGlobe, FaLock, FaBolt, FaBullseye } from 'react-icons/fa';
 
 const Features = () => {
     const features = [
         {
-            icon: '🎤',
+            icon: <FaMicrophone />,
             title: 'Real-Time Voice Recognition',
             description: 'Advanced speech-to-text technology captures your voice with 95%+ accuracy in real-time.'
         },
         {
-            icon: '💬',
+            icon: <FaComments />,
             title: 'Natural Conversation',
             description: 'Engage in fluid, context-aware dialogues that feel genuinely human and responsive.'
         },
         {
-            icon: '🌍',
+            icon: <FaGlobe />,
             title: 'Multi-Language Support',
             description: 'Communicate in multiple languages with seamless translation and understanding.'
         },
         {
-            icon: '🔒',
+            icon: <FaLock />,
             title: 'Privacy-Focused',
             description: 'Your conversations are secure with end-to-end encryption and no data storage.'
         },
         {
-            icon: '⚡',
+            icon: <FaBolt />,
             title: 'Lightning Fast',
             description: 'Get instant responses with minimal latency for a smooth conversational experience.'
         },
         {
-            icon: '🎯',
+            icon: <FaBullseye />,
             title: 'Context Understanding',
             description: 'AI remembers conversation context to provide more relevant and helpful responses.'
         }

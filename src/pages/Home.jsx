@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ChatContainer from "../components/ChatContainer";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer"; // Removed Footer import
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
@@ -8,38 +9,36 @@ import About from "../components/About";
 import "../css/Home.css";
 
 const Home = () => {
-  const [isChatMode, setIsChatMode] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="home-wrapper">
-      <Navbar isChatMode={isChatMode} setIsChatMode={setIsChatMode} />
+      <Navbar />
 
-      {!isChatMode ? (
-        <>
-          <Hero />
-          <Features />
+      <Hero />
+      <Features />
 
-          <section className="chat-section" id="chat-section">
-            <div className="chat-section__container">
-              <h2 className="chat-section__title">Try It Now</h2>
-              <p className="chat-section__subtitle">
-                Start a conversation with BodhitaMinds AI voice assistant
-              </p>
-              <ChatContainer />
-            </div>
-          </section>
+      <section className="chat-section" id="chat-section">
+        <div className="chat-section__container">
+          <h2 className="chat-section__title">Try It Now</h2>
+          <p className="chat-section__subtitle">
+            Start a conversation with BodhitaMinds AI voice assistant
+          </p>
+          <ChatContainer />
+        </div>
+      </section>
 
-          <About />
-        </>
-      ) : (
-        <section className="chat-fullscreen">
-          <div className="chat-fullscreen__container">
-            <ChatContainer />
-          </div>
-        </section>
-      )}
+      <About />
 
-      <Footer isChatMode={isChatMode} setIsChatMode={setIsChatMode} />
+      {/* <Footer /> Replaced with Ask Button */}
+
+      <button
+        className="ask-floating-btn"
+        onClick={() => navigate('/chat')}
+      >
+        Ask
+      </button>
+
     </div>
   );
 };

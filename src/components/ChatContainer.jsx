@@ -21,11 +21,11 @@ const App = () => {
 
   return (
     <div className="baap">
-      <div className="chat-panel">
-        <div className="chat-content">
+      {/* <div className="chat-panel"> */}
+        {/* <div className="chat-content"> */}
           <ChatMessages messages={messages} />
-        </div>
-      </div>
+        {/* </div> */}
+      {/* </div> */}
     </div>
   );
 };

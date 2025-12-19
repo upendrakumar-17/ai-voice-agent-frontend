@@ -16,10 +16,17 @@
 .voice-control-bar__content {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 20px;
-  justify-content: space-between;
+}
+
+.voice-control-bar__left-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
 }
 
 .voice-control-bar__button {
@@ -33,6 +40,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  justify-self: start;
 }
 
 .voice-control-bar__button:hover {
@@ -58,6 +66,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  justify-self: start;
 }
 
 .voice-control-bar__exit:hover {
@@ -67,17 +76,19 @@
 }
 
 .voice-control-bar__waveform {
-  flex: 1;
-  max-width: 500px;
+  width: 500px;
+  max-width: 100%;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+  grid-column: 2;
 }
 
 .voice-control-bar__actions {
   display: flex;
   gap: 10px;
+  justify-self: end;
 }
 
 .voice-control-bar__action {

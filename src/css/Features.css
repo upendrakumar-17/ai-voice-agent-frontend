@@ -53,6 +53,14 @@
     margin-bottom: 20px;
     display: inline-block;
     animation: bounce 2s infinite;
+
+    /* Theme Gradient */
+    color: #7c3aed;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 10px rgba(124, 58, 237, 0.3));
 }
 
 .feature-card:hover .feature-card__icon {

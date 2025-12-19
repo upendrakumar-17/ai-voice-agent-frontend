@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isChatMode, setIsChatMode }) => {
+const Footer = () => {
   const [isActive, setIsActive] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isChatMode = location.pathname === '/chat';
 
   const handleSpeakClick = () => {
     setIsActive(true);
-    setIsChatMode(true);
+    navigate('/chat');
   };
 
   const handleStopClick = () => {
@@ -16,7 +20,7 @@ const Footer = ({ isChatMode, setIsChatMode }) => {
 
   const handleExitChat = () => {
     setIsActive(false);
-    setIsChatMode(false);
+    navigate('/');
   };
 
   return (
@@ -24,21 +28,25 @@ const Footer = ({ isChatMode, setIsChatMode }) => {
       {/* Voice Control Bar - Sticky at bottom */}
       <div className="voice-control-bar">
         <div className="voice-control-bar__content">
-          {isChatMode && (
+          {/* {isChatMode && (
+            
+          )} */}
+
+
+          <div className="voice-control-bar__left-controls">
             <button
               className="voice-control-bar__exit"
               onClick={handleExitChat}
             >
               ← Exit Chat
             </button>
-          )}
-
-          <button
-            className={`voice-control-bar__button ${isActive ? 'voice-control-bar__button--active' : ''}`}
-            onClick={isActive ? handleStopClick : handleSpeakClick}
-          >
-            {isActive ? 'Stop' : 'Speak'}
-          </button>
+            <button
+              className={`voice-control-bar__button ${isActive ? 'voice-control-bar__button--active' : ''}`}
+              onClick={isActive ? handleStopClick : handleSpeakClick}
+            >
+              {isActive ? 'Stop' : 'Speak'}
+            </button>
+          </div>
 
           <div className="voice-control-bar__waveform">
             <SiriWaveform isActive={isActive} />
