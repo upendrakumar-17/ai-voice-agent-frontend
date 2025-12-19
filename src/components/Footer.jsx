@@ -3,19 +3,37 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = () => {
+const Footer = ({ isRecording, onToggleRecording }) => {
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isChatMode = location.pathname === '/chat';
 
+  // If in chat mode, usage of internal state vs props:
+  // We want the Footer button to trigger the parent's toggleRecording if in chat mode.
+  // We also want the visual state (isActive/isRecording) to be driven by the prop in chat mode.
+
+  const activeState = isChatMode ? isRecording : isActive;
+
   const handleSpeakClick = () => {
-    setIsActive(true);
-    navigate('/chat');
+    if (isChatMode) {
+      if (onToggleRecording) onToggleRecording();
+    } else {
+      setIsActive(true);
+      navigate('/chat');
+      // We can't immediately start recording here because we haven't mounted Chat yet/passed the prop down?
+      // Actually, navigation happens, Chat mounts. The user might need to click again or we can pass state via router location (advanced).
+      // For now, simple navigation is fine. User clicks again to start.
+      // OR: "Speak" on home page just navigates to Chat.
+    }
   };
 
   const handleStopClick = () => {
-    setIsActive(false);
+    if (isChatMode) {
+      if (onToggleRecording) onToggleRecording();
+    } else {
+      setIsActive(false);
+    }
   };
 
   const handleExitChat = () => {
@@ -28,11 +46,6 @@ const Footer = () => {
       {/* Voice Control Bar - Sticky at bottom */}
       <div className="voice-control-bar">
         <div className="voice-control-bar__content">
-          {/* {isChatMode && (
-            
-          )} */}
-
-
           <div className="voice-control-bar__left-controls">
             <button
               className="voice-control-bar__exit"
@@ -41,15 +54,15 @@ const Footer = () => {
               ← Exit Chat
             </button>
             <button
-              className={`voice-control-bar__button ${isActive ? 'voice-control-bar__button--active' : ''}`}
-              onClick={isActive ? handleStopClick : handleSpeakClick}
+              className={`voice-control-bar__button ${activeState ? 'voice-control-bar__button--active' : ''}`}
+              onClick={activeState ? handleStopClick : handleSpeakClick}
             >
-              {isActive ? 'Stop' : 'Speak'}
+              {activeState ? 'Stop' : 'Speak'}
             </button>
           </div>
 
           <div className="voice-control-bar__waveform">
-            <SiriWaveform isActive={isActive} />
+            <SiriWaveform isActive={activeState} />
           </div>
 
           <div className="voice-control-bar__actions">
