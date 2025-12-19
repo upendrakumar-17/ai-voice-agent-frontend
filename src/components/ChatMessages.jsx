@@ -14,7 +14,7 @@ const ChatMessages = ({ messages }) => {
 
   return (
     <div className="chat-messages-container">
-      {messages.map((msg, index) => (
+      {messages?.map((msg, index) => (
         <div
           key={index}
           className={`chat-message ${msg.type === 'incoming' ? 'incoming' : 'outgoing'} ${msg.isLive ? 'live' : ''}`}

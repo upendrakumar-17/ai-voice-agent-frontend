@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div className="home-wrapper">
       <Navbar />
-
+      
       <Hero />
       <Features />
 

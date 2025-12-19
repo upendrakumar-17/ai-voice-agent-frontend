@@ -45,18 +45,21 @@ const Chat = () => {
                 if (interimTranscript) {
                     setMessages(prev => {
                         const newMessages = [...prev];
-                        const lastIndex = newMessages.length - 1;
-                        const lastMsg = newMessages[lastIndex];
-
-                        // If the last message is a "live" outgoing message, update it
-                        if (lastMsg && lastMsg.isLive) {
-                            newMessages[lastIndex] = { ...lastMsg, text: interimTranscript };
-                            return newMessages;
-                        } else {
-                            // Otherwise, verify if we recently finished one or need a new one
-                            // Ideally, we start a new one
-                            return [...newMessages, { text: interimTranscript, type: 'outgoing', isLive: true }];
+                        // Find the live outgoing message (search backwards)
+                        let liveIndex = -1;
+                        for (let i = newMessages.length - 1; i >= 0; i--) {
+                            if (newMessages[i].isLive && newMessages[i].type === 'outgoing') {
+                                liveIndex = i;
+                                break;
+                            }
                         }
+
+                        if (liveIndex !== -1) {
+                            // Update the existing live message
+                            newMessages[liveIndex] = { ...newMessages[liveIndex], text: interimTranscript };
+                        }
+                        // If no live message found, don't create one - the placeholder was already created in toggleRecording
+                        return newMessages;
                     });
                 }
             };
@@ -116,12 +119,10 @@ const Chat = () => {
     const handleStreamEvent = (data) => {
         switch (data.type) {
             case 'transcription':
-                // The backend successfully transcribed the audio.
-                // We should update our "live" message with this final accurate version.
+                // Update the user's outgoing message with the final transcribed text
                 setMessages(prev => {
                     const newMessages = [...prev];
-                    // Find the last outgoing message to update, regardless of if a response has started
-                    // Iterate backwards
+                    // Search backwards for the last outgoing message
                     let targetIndex = -1;
                     for (let i = newMessages.length - 1; i >= 0; i--) {
                         if (newMessages[i].type === 'outgoing') {
@@ -133,7 +134,6 @@ const Chat = () => {
                     if (targetIndex !== -1) {
                         newMessages[targetIndex] = { ...newMessages[targetIndex], text: data.text, isLive: false };
                     } else {
-                        // Fallback if no outgoing message found (shouldn't happen with current flow)
                         newMessages.push({ text: data.text, type: 'outgoing', isLive: false });
                     }
                     return newMessages;
@@ -141,7 +141,16 @@ const Chat = () => {
                 break;
 
             case 'response_start':
-                setMessages(prev => [...prev, { text: '...', type: 'incoming', isStreaming: true }]);
+                // 1. Start with the "..." loading state
+                setMessages(prev => [
+                    ...prev,
+                    {
+                        text: '...',           // The visible loading dots
+                        type: 'incoming',
+                        isStreaming: true,     // We are receiving data
+                        isModelLoading: true   // Specific flag: we haven't received text yet
+                    }
+                ]);
                 break;
 
             case 'text_chunk':
@@ -150,17 +159,25 @@ const Chat = () => {
                     const lastIndex = newMessages.length - 1;
                     const lastMsg = newMessages[lastIndex];
 
+                    // Ensure we are modifying the correct incoming stream message
                     if (lastMsg && lastMsg.isStreaming) {
-                        // If current text is just the loading indicator, replace it
-                        // Otherwise append
-                        const newText = lastMsg.text === '...' ? data.text : lastMsg.text + data.text;
-                        newMessages[lastIndex] = { ...lastMsg, text: newText };
-                    } else {
-                        console.warn("Received text_chunk but no streaming message chunk found.", data);
-                        // Fallback: If we missed the start, just append it
-                        if (!lastMsg || !lastMsg.isStreaming) {
-                            newMessages.push({ text: data.text, type: 'incoming', isStreaming: true });
+                        if (lastMsg.isModelLoading) {
+                            // 2. First chunk received: REPLACE the '...' with the first chunk
+                            newMessages[lastIndex] = {
+                                ...lastMsg,
+                                text: data.text,
+                                isModelLoading: false // Turn off the loading flag
+                            };
+                        } else {
+                            // 3. Subsequent chunks: APPEND to the existing text
+                            newMessages[lastIndex] = {
+                                ...lastMsg,
+                                text: lastMsg.text + data.text
+                            };
                         }
+                    } else {
+                        // Fallback: If for some reason response_start was missed
+                        newMessages.push({ text: data.text, type: 'incoming', isStreaming: true, isModelLoading: false });
                     }
                     return newMessages;
                 });
@@ -176,13 +193,34 @@ const Chat = () => {
                     const lastMsg = newMessages[newMessages.length - 1];
                     if (lastMsg) {
                         lastMsg.isStreaming = false;
+                        lastMsg.isModelLoading = false;
+
+                        // Text-to-Speech using Web Speech API
+                        if (lastMsg.type === 'incoming' && lastMsg.text && lastMsg.text !== '...' && 'speechSynthesis' in window) {
+                            // Cancel any ongoing speech
+                            window.speechSynthesis.cancel();
+
+                            const utterance = new SpeechSynthesisUtterance(lastMsg.text);
+                            utterance.rate = 1.0;
+                            utterance.pitch = 1.0;
+                            utterance.volume = 1.0;
+
+                            // Try to use a nice voice if available
+                            const voices = window.speechSynthesis.getVoices();
+                            const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Microsoft'));
+                            if (preferredVoice) {
+                                utterance.voice = preferredVoice;
+                            }
+
+                            // window.speechSynthesis.speak(utterance);
+                        }
                     }
                     return newMessages;
                 });
                 break;
 
             case 'done':
-                // Ready for next interaction
+                // Session ended or ready for next input
                 break;
 
             case 'error':
