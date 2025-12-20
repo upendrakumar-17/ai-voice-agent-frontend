@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding }) => {
+const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding, onReset }) => {
 
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
@@ -79,7 +79,7 @@ const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding }
                 </select>
               )}
               {/* <button className="voice-control-bar__action">Clear</button> */}
-              <button className="voice-control-bar__action">Reset</button>
+              <button className="voice-control-bar__action" onClick={onReset}>Reset</button>
             </div>
           </div>
         </div>

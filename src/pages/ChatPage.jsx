@@ -23,6 +23,7 @@ const ChatPage = () => {
     const isNetworkProcessing = React.useRef(false);
     const isVisualTyping = React.useRef(false);
     const statusMessageIndex = React.useRef(null); // Track index of status message
+    const currentAudioRef = React.useRef(null); // Track current audio object
 
     React.useEffect(() => {
         if ('webkitSpeechRecognition' in window) {
@@ -95,6 +96,7 @@ const ChatPage = () => {
             const audioBlob = new Blob([bytes], { type: 'audio/wav' });
             const audioUrl = URL.createObjectURL(audioBlob);
             const audio = new Audio(audioUrl);
+            currentAudioRef.current = audio;
 
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
@@ -408,6 +410,36 @@ const ChatPage = () => {
         }
     };
 
+    const resetChat = () => {
+        // 1. Stop Audio Playback
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
+        }
+        audioQueueRef.current = [];
+        isPlayingAudioRef.current = false;
+
+        // 2. Stop Recording
+        if (isRecording) {
+            setIsRecording(false);
+            recognitionRef.current?.stop();
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                mediaRecorderRef.current.stop();
+            }
+        }
+
+        // 3. Reset Processing States
+        setIsResponding(false);
+        isNetworkProcessing.current = false;
+        isVisualTyping.current = false;
+        statusMessageIndex.current = null;
+
+        // 4. Reset Messages
+        setMessages([
+            { text: 'Hello! How can I assist you today?', type: 'incoming' }
+        ]);
+    };
+
     return (
         <div className="home-wrapper">
             <Navbar />
@@ -419,7 +451,7 @@ const ChatPage = () => {
                     checkAllDone();
                 }}
             />
-            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} isResponding={isResponding} />
+            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} isResponding={isResponding} onReset={resetChat} />
         </div>
     );
 };
