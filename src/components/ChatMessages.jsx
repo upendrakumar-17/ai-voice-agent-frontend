@@ -1,6 +1,7 @@
 import { useRef } from 'react';
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import '../css/ChatMessages.css';
+import StreamingText from './StreamingText';
 
 const ChatMessages = ({ messages }) => {
   const messagesEndRef = useRef(null);
@@ -27,7 +28,11 @@ const ChatMessages = ({ messages }) => {
               <span></span>
             </div>
           ) : (
-            msg.text
+            msg.type === 'incoming' && msg.isStreaming !== undefined ? (
+              <StreamingText text={msg.text} speed={30} />
+            ) : (
+              msg.text
+            )
           )}
         </div>
       ))}
