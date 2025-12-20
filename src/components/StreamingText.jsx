@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const StreamingText = ({ text, speed = 10 }) => {
+const StreamingText = ({ text, speed, isStreamComplete, onComplete }) => {
     const [displayedText, setDisplayedText] = useState('');
     const indexRef = useRef(0);
     const textRef = useRef(text);
@@ -14,11 +14,15 @@ const StreamingText = ({ text, speed = 10 }) => {
             if (indexRef.current < textRef.current.length) {
                 indexRef.current++;
                 setDisplayedText(textRef.current.slice(0, indexRef.current));
+            } else if (isStreamComplete && indexRef.current >= textRef.current.length) {
+                // Fully displayed and stream is done
+                if (onComplete) onComplete();
+                clearInterval(timer);
             }
         }, speed);
 
         return () => clearInterval(timer);
-    }, [speed]);
+    }, [speed, isStreamComplete, onComplete]);
 
     return <span>{displayedText}</span>;
 };

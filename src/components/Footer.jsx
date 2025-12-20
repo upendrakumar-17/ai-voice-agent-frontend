@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isRecording, setIsRecording, onToggleRecording }) => {
+const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding }) => {
 
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
@@ -17,6 +17,7 @@ const Footer = ({ isRecording, setIsRecording, onToggleRecording }) => {
   const activeState = isChatMode ? isRecording : isActive;
 
   const handleSpeakClick = () => {
+    if (isResponding) return; // Prevent action if responding
     if (isChatMode) {
       if (onToggleRecording) onToggleRecording();
     } else {
@@ -55,12 +56,14 @@ const Footer = ({ isRecording, setIsRecording, onToggleRecording }) => {
               >
                 ← Exit Chat
               </button>
-              <button
-                className={`voice-control-bar__button ${activeState ? 'voice-control-bar__button--active' : ''}`}
-                onClick={activeState ? handleStopClick : handleSpeakClick}
-              >
-                {activeState ? 'Stop' : 'Speak'}
-              </button>
+              {!isResponding && (
+                <button
+                  className={`voice-control-bar__button ${activeState ? 'voice-control-bar__button--active' : ''}`}
+                  onClick={activeState ? handleStopClick : handleSpeakClick}
+                >
+                  {activeState ? 'Stop' : 'Speak'}
+                </button>
+              )}
             </div>
 
             <div className="voice-control-bar__waveform">

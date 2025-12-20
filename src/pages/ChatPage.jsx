@@ -10,6 +10,7 @@ const ChatPage = () => {
         { text: 'Hello! How can I assist you today?', type: 'incoming' },
     ]);
     const [isRecording, setIsRecording] = useState(false);
+    const [isResponding, setIsResponding] = useState(false);
 
     // Audio refs
     const mediaRecorderRef = React.useRef(null);
@@ -17,6 +18,11 @@ const ChatPage = () => {
     const audioQueueRef = React.useRef([]);
     const isPlayingAudioRef = React.useRef(false);
     const recognitionRef = React.useRef(null);
+
+    // State Tracking Refs (to avoid stale closures in callbacks)
+    const isNetworkProcessing = React.useRef(false);
+    const isVisualTyping = React.useRef(false);
+    const statusMessageIndex = React.useRef(null); // Track index of status message
 
     React.useEffect(() => {
         if ('webkitSpeechRecognition' in window) {
@@ -72,6 +78,7 @@ const ChatPage = () => {
     const playNextAudio = async () => {
         if (audioQueueRef.current.length === 0) {
             isPlayingAudioRef.current = false;
+            checkAllDone();
             return;
         }
 
@@ -113,6 +120,48 @@ const ChatPage = () => {
         }
     };
 
+    const checkAllDone = () => {
+        // Check if everything is finished
+        const networkDone = !isNetworkProcessing.current;
+        const visualDone = !isVisualTyping.current;
+        const audioDone = !isPlayingAudioRef.current && audioQueueRef.current.length === 0;
+
+        if (networkDone && visualDone && audioDone) {
+            setIsResponding(false);
+        }
+    };
+
+    const updateStatusMessage = (newText) => {
+        setMessages(prev => {
+            const newMessages = [...prev];
+            if (statusMessageIndex.current !== null && statusMessageIndex.current < newMessages.length) {
+                // Update existing status message
+                newMessages[statusMessageIndex.current] = {
+                    ...newMessages[statusMessageIndex.current],
+                    text: newText
+                };
+            } else {
+                // Create new status message
+                newMessages.push({
+                    text: newText,
+                    type: 'incoming',
+                    isStatusMessage: true
+                });
+                statusMessageIndex.current = newMessages.length - 1;
+            }
+            return newMessages;
+        });
+    };
+
+    const removeStatusMessage = () => {
+        setMessages(prev => {
+            // Remove any message with isStatusMessage flag
+            const filtered = prev.filter(msg => !msg.isStatusMessage);
+            statusMessageIndex.current = null;
+            return filtered;
+        });
+    };
+
     const handleStreamEvent = (data) => {
         switch (data.type) {
             case 'transcription':
@@ -138,16 +187,25 @@ const ChatPage = () => {
                 break;
 
             case 'response_start':
-                // 1. Start with the "..." loading state
-                setMessages(prev => [
-                    ...prev,
-                    {
-                        text: '...',           // The visible loading dots
-                        type: 'incoming',
-                        isStreaming: true,     // We are receiving data
-                        isModelLoading: true   // Specific flag: we haven't received text yet
-                    }
-                ]);
+                setIsResponding(true);
+                isNetworkProcessing.current = true;
+                isVisualTyping.current = true; // Assume typing starts
+                // Remove status message and add actual response in one update
+                setMessages(prev => {
+                    // Filter out any status messages
+                    const filtered = prev.filter(msg => !msg.isStatusMessage);
+                    statusMessageIndex.current = null;
+                    // Add the new loading message
+                    return [
+                        ...filtered,
+                        {
+                            text: '...',           // The visible loading dots
+                            type: 'incoming',
+                            isStreaming: true,     // We are receiving data
+                            isModelLoading: true   // Specific flag: we haven't received text yet
+                        }
+                    ];
+                });
                 break;
 
             case 'text_chunk':
@@ -174,6 +232,9 @@ const ChatPage = () => {
                         }
                     } else {
                         // Fallback: If for some reason response_start was missed
+                        setIsResponding(true);
+                        isNetworkProcessing.current = true;
+                        isVisualTyping.current = true;
                         newMessages.push({ text: data.text, type: 'incoming', isStreaming: true, isModelLoading: false });
                     }
                     return newMessages;
@@ -185,6 +246,9 @@ const ChatPage = () => {
                 break;
 
             case 'response_complete':
+                isNetworkProcessing.current = false;
+                checkAllDone();
+
                 setMessages(prev => {
                     const newMessages = [...prev];
                     const lastMsg = newMessages[newMessages.length - 1];
@@ -192,24 +256,13 @@ const ChatPage = () => {
                         lastMsg.isStreaming = false;
                         lastMsg.isModelLoading = false;
 
-                        // Text-to-Speech using Web Speech API
+                        // Text-to-Speech using Web Speech API (Fallback)
                         if (lastMsg.type === 'incoming' && lastMsg.text && lastMsg.text !== '...' && 'speechSynthesis' in window) {
-                            // Cancel any ongoing speech
-                            window.speechSynthesis.cancel();
-
-                            const utterance = new SpeechSynthesisUtterance(lastMsg.text);
-                            utterance.rate = 1.0;
-                            utterance.pitch = 1.0;
-                            utterance.volume = 1.0;
-
-                            // Try to use a nice voice if available
-                            const voices = window.speechSynthesis.getVoices();
-                            const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Microsoft'));
-                            if (preferredVoice) {
-                                utterance.voice = preferredVoice;
-                            }
-
-                            // window.speechSynthesis.speak(utterance);
+                            // Only if we didn't receive audio chunks? 
+                            // The provided code receives audio chunks, so this might be dead code or fallback.
+                            // If we rely on audio chunks, we should ensure this doesn't run concurrently or double up.
+                            // For now, let's assume the server sends audio.
+                            // If it sends 'audio_chunk', playAudioChunk handles it.
                         }
                     }
                     return newMessages;
@@ -221,6 +274,12 @@ const ChatPage = () => {
                 break;
 
             case 'error':
+                removeStatusMessage();
+                setIsResponding(false);
+                isNetworkProcessing.current = false;
+                isVisualTyping.current = false;
+                isPlayingAudioRef.current = false;
+                audioQueueRef.current = [];
                 console.error('Server error:', data.message);
                 setMessages(prev => [...prev, { text: `Error: ${data.message}`, type: 'incoming' }]);
                 break;
@@ -243,6 +302,10 @@ const ChatPage = () => {
 
             console.log("Response", response);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            // Update status to animated dots
+            updateStatusMessage('...');
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let buffer = '';
@@ -275,7 +338,12 @@ const ChatPage = () => {
 
         } catch (error) {
             console.error('Error sending audio:', error);
+            removeStatusMessage();
             setMessages(prev => [...prev, { text: "Sorry, I couldn't process that request.", type: 'incoming' }]);
+            // Reset state on error
+            setIsResponding(false);
+            isNetworkProcessing.current = false;
+            isVisualTyping.current = false;
         }
     };
 
@@ -286,6 +354,8 @@ const ChatPage = () => {
                 recognitionRef.current?.start();
                 // Create a placeholder message for live transcription
                 setMessages(prev => [...prev, { text: '...', type: 'outgoing', isLive: true }]);
+                // Show animated dots status
+                updateStatusMessage('...');
 
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorderRef.current = new MediaRecorder(stream);
@@ -313,6 +383,13 @@ const ChatPage = () => {
                         return newMessages;
                     });
 
+                    // Update status to animated dots
+                    updateStatusMessage('...');
+
+                    // Set responding immediately to prevent duplicate requests
+                    setIsResponding(true);
+                    isNetworkProcessing.current = true;
+
                     await sendAudioToAPI(audioBlob);
                 };
 
@@ -334,8 +411,15 @@ const ChatPage = () => {
     return (
         <div className="home-wrapper">
             <Navbar />
-            <ChatContainer messages={messages} setMessages={setMessages} />
-            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} />
+            <ChatContainer
+                messages={messages}
+                setMessages={setMessages}
+                onTypingComplete={() => {
+                    isVisualTyping.current = false;
+                    checkAllDone();
+                }}
+            />
+            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} isResponding={isResponding} />
         </div>
     );
 };

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import '../css/ChatMessages.css';
 import StreamingText from './StreamingText';
 
-const ChatMessages = ({ messages }) => {
+const ChatMessages = ({ messages, onTypingComplete }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -29,7 +29,17 @@ const ChatMessages = ({ messages }) => {
             </div>
           ) : (
             msg.type === 'incoming' && msg.isStreaming !== undefined ? (
-              <StreamingText text={msg.text} speed={30} />
+              <StreamingText
+                text={msg.text}
+                speed={15}
+                isStreamComplete={!msg.isStreaming}
+                onComplete={() => {
+                  // Only trigger completion if this is the last message (active one) and stream is done
+                  if (index === messages.length - 1 && onTypingComplete) {
+                    onTypingComplete();
+                  }
+                }}
+              />
             ) : (
               msg.text
             )
