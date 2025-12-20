@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../css/Home.css"; // Reusing Home styles for now as requested plan implies reusing .chat-fullscreen
 
-const Chat = () => {
+const ChatPage = () => {
 
     const [messages, setMessages] = useState([
         { text: 'Hello! How can I assist you today?', type: 'incoming' },
@@ -55,6 +55,14 @@ const Chat = () => {
 
             recognition.onerror = (event) => {
                 console.error("Speech recognition error", event.error);
+
+            };
+
+            recognition.onend = () => {
+                setIsRecording(false);
+                if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                    mediaRecorderRef.current.stop();
+                }
             };
 
             recognitionRef.current = recognition;
@@ -325,12 +333,12 @@ const Chat = () => {
 
     return (
         <div className="home-wrapper">
-            <Navbar/>
+            <Navbar />
             <ChatContainer messages={messages} setMessages={setMessages} />
-            <Footer isRecording={isRecording} onToggleRecording={toggleRecording} />
+            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} />
         </div>
     );
 };
 
 
-export default Chat;
+export default ChatPage;

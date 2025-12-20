@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isRecording, onToggleRecording}) => {
-  
+const Footer = ({ isRecording, setIsRecording, onToggleRecording }) => {
+
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,33 +46,40 @@ const Footer = ({ isRecording, onToggleRecording}) => {
     <>
       {/* Voice Control Bar - Sticky at bottom */}
       <>{isChatMode && (
-      <div className="voice-control-bar">
-        <div className="voice-control-bar__content">
-          <div className="voice-control-bar__left-controls">
-            <button
-              className="voice-control-bar__exit"
-              onClick={handleExitChat}
-            >
-              ← Exit Chat
-            </button>
-            <button
-              className={`voice-control-bar__button ${activeState ? 'voice-control-bar__button--active' : ''}`}
-              onClick={activeState ? handleStopClick : handleSpeakClick}
-            >
-              {activeState ? 'Stop' : 'Speak'}
-            </button>
-          </div>
+        <div className="voice-control-bar">
+          <div className="voice-control-bar__content">
+            <div className="voice-control-bar__left-controls">
+              <button
+                className="voice-control-bar__exit"
+                onClick={handleExitChat}
+              >
+                ← Exit Chat
+              </button>
+              <button
+                className={`voice-control-bar__button ${activeState ? 'voice-control-bar__button--active' : ''}`}
+                onClick={activeState ? handleStopClick : handleSpeakClick}
+              >
+                {activeState ? 'Stop' : 'Speak'}
+              </button>
+            </div>
 
-          <div className="voice-control-bar__waveform">
-            <SiriWaveform isActive={activeState} />
-          </div>
+            <div className="voice-control-bar__waveform">
+              <SiriWaveform isActive={activeState} />
+            </div>
 
-          <div className="voice-control-bar__actions">
-            <button className="voice-control-bar__action">Clear</button>
-            <button className="voice-control-bar__action">Reset</button>
+            <div className="voice-control-bar__actions">
+              {(
+                <select className="navbar__dropdown" defaultValue="general">
+                  <option value="general">General</option>
+                  <option value="technical">Technical</option>
+                  <option value="casual">Casual</option>
+                </select>
+              )}
+              {/* <button className="voice-control-bar__action">Clear</button> */}
+              <button className="voice-control-bar__action">Reset</button>
+            </div>
           </div>
         </div>
-      </div>
       )}</>
 
       {/* Informational Footer - Hidden in chat mode

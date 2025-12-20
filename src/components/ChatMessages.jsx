@@ -1,14 +1,15 @@
-import React from 'react';
+import { useRef } from 'react';
+import React,{useEffect} from 'react';
 import '../css/ChatMessages.css';
 
 const ChatMessages = ({ messages }) => {
-  const messagesEndRef = React.useRef(null);
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 

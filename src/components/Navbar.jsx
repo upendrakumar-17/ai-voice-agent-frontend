@@ -49,13 +49,13 @@ const Navbar = () => {
       )}
 
       <div className="navbar__controls">
-        {isChatMode && (
+        {/* {isChatMode && (
           <select className="navbar__dropdown" defaultValue="general">
             <option value="general">General</option>
             <option value="technical">Technical</option>
             <option value="casual">Casual</option>
           </select>
-        )}
+        )} */}
 
         {!isChatMode && (
           <button
