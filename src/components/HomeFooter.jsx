@@ -25,7 +25,7 @@ const HomeFooter = () => {
                 <div className="footer-info__section">
                     <h4 className="footer-info__heading">Contact</h4>
                     <div className="footer-info__contact">
-                        <p>Email: support@aivoicechat.com</p>
+                        <p>Email: support@bodhitaminds.com</p>
                         <p>Available 24/7</p>
                     </div>
                 </div>
