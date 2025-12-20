@@ -72,10 +72,10 @@ const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding, 
 
             <div className="voice-control-bar__actions">
               {(
-                <select className="navbar__dropdown" defaultValue="general">
-                  <option value="general">General</option>
+                <select className="navbar__dropdown" defaultValue="healthcare">
+                  {/* <option value="general">General</option> */}
                   <option value="healthcare">Healthcare</option>
-                  <option value="finance">Finance</option>
+                  {/* <option value="finance">Finance</option> */}
                 </select>
               )}
               {/* <button className="voice-control-bar__action">Clear</button> */}

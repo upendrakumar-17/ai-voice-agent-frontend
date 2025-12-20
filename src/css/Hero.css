@@ -5,7 +5,7 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #f8f7ff 0%, #ffffff 50%, #f5f3ff 100%);
+    background: var(--bg-gradient);
     padding: 100px 20px 80px;
 }
 
@@ -21,12 +21,12 @@
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 24px;
-    color: #1a1a1a;
+    color: var(--text-primary);
     animation: fadeInUp 0.8s ease-out;
 }
 
 .hero__highlight {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -34,7 +34,7 @@
 
 .hero__subtitle {
     font-size: 1.25rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin-bottom: 40px;
     line-height: 1.6;
     animation: fadeInUp 0.8s ease-out 0.2s both;
@@ -45,7 +45,8 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    /* Always white on primary button */
+    background: var(--primary-gradient);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -154,12 +155,20 @@
 }
 
 @keyframes loadingDots {
-  0% { content: '.'; }
-  33% { content: '..'; }
-  66% { content: '...'; }
+    0% {
+        content: '.';
+    }
+
+    33% {
+        content: '..';
+    }
+
+    66% {
+        content: '...';
+    }
 }
 
 .message.incoming.loading::after {
-  content: '.';
-  animation: loadingDots 1.5s infinite;
+    content: '.';
+    animation: loadingDots 1.5s infinite;
 }

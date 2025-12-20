@@ -1,7 +1,7 @@
 .home-wrapper {
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--bg-primary);
   display: flex;
   flex-direction: column;
 }
@@ -13,7 +13,7 @@
 /* Chat Section (Landing Page) */
 .chat-section {
   padding: 100px 20px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%);
+  background: var(--bg-gradient);
 }
 
 .chat-section__container {
@@ -27,14 +27,14 @@
 .chat-section__title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 16px;
   text-align: center;
 }
 
 .chat-section__subtitle {
   font-size: 1.125rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin-bottom: 40px;
   text-align: center;
 }
@@ -44,7 +44,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #f8f7ff 0%, #ffffff 100%);
+  background: var(--bg-chat-fullscreen);
   /* position: relative; */
 }
 
@@ -63,16 +63,8 @@
 }
 
 @media (max-width: 768px) {
-  .chat-section {
-    /* padding: 60px 20px; */
-  }
-
   .chat-section__title {
     font-size: 2rem;
-  }
-
-  .chat-fullscreen {
-    /* padding: 80px 20px 140px; */
   }
 }
 

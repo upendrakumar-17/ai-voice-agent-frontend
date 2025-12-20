@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FaSun, FaMoon } from 'react-icons/fa';
+import { useTheme } from '../context/ThemeContext';
 import '../css/Navbar.css';
 
 const Navbar = () => {
 
   const [isNavSectionMenuOpen, setIsNavSectionMenuOpen] = useState(false);
-  const [themeButton, setThemeButton] = useState('light');
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isChatMode = location.pathname === '/chat';
 
@@ -69,10 +70,10 @@ const Navbar = () => {
 
         <button
           className="navbar__theme-toggle"
-          onClick={() => setThemeButton(themeButton === 'light' ? 'dark' : 'light')}
+          onClick={toggleTheme}
           aria-label="Toggle theme"
         >
-          {themeButton === 'light' ? <FaMoon /> : <FaSun />}
+          {theme === 'light' ? <FaMoon /> : <FaSun />}
         </button>
 
       </div>

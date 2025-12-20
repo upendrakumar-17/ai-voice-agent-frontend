@@ -1,9 +1,10 @@
 /* Informational Footer */
 .footer-info {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 60px 20px 20px;
     /* margin-bottom: 90px; */
+    border-top: 1px solid var(--glass-border);
 }
 
 .footer-info__container {
@@ -24,7 +25,7 @@
 .footer-info__title {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -32,7 +33,7 @@
 }
 
 .footer-info__description {
-    color: #9ca3af;
+    color: var(--text-secondary);
     line-height: 1.6;
     font-size: 0.95rem;
 }
@@ -41,6 +42,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     margin: 0;
+    color: var(--text-primary);
 }
 
 .footer-info__links {
@@ -50,18 +52,18 @@
 }
 
 .footer-info__link {
-    color: #9ca3af;
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.95rem;
     transition: color 0.2s ease;
 }
 
 .footer-info__link:hover {
-    color: #a855f7;
+    color: var(--primary-accent);
 }
 
 .footer-info__contact {
-    color: #9ca3af;
+    color: var(--text-secondary);
     font-size: 0.95rem;
     line-height: 1.8;
 }
@@ -69,8 +71,8 @@
 .footer-info__bottom {
     text-align: center;
     padding-top: 30px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #6b7280;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-tertiary);
     font-size: 0.9rem;
 }
 

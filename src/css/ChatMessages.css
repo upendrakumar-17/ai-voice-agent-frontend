@@ -49,10 +49,12 @@
 /* Incoming messages - Clean white with subtle shadow */
 .chat-message.incoming {
   align-self: flex-start;
-  color: #1f2937;
-  background: #ffffff;
-  border: 1px solid rgba(139, 92, 246, 0.12);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  /* Using primary bg for message card feel */
+  border: 1px solid var(--glass-border);
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+  /* Could var this too */
   font-weight: 400;
 }
 
@@ -65,7 +67,7 @@
 .chat-message.outgoing {
   align-self: flex-end;
   color: #ffffff;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  background: var(--primary-gradient);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 16px rgba(124, 58, 237, 0.25);
   font-weight: 500;

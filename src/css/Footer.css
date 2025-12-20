@@ -4,11 +4,12 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(139, 92, 246, 0.1);
+  border-top: 1px solid var(--glass-border);
   box-shadow: 0 -4px 24px rgba(139, 92, 246, 0.08);
+  /* Could abstract this shadow too if needed */
   z-index: 999;
   padding: 12px 20px;
 }
@@ -32,9 +33,9 @@
 .voice-control-bar__button {
   padding: 10px 24px;
   border-radius: 12px;
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(139, 92, 246, 0.05);
-  color: #6b21a8;
+  border: 1px solid var(--glass-border);
+  background: var(--element-bg);
+  color: var(--primary-accent);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -44,12 +45,12 @@
 }
 
 .voice-control-bar__button:hover {
-  background: rgba(139, 92, 246, 0.12);
+  background: var(--element-bg-hover);
   border-color: rgba(139, 92, 246, 0.3);
 }
 
 .voice-control-bar__button--active {
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  background: var(--primary-gradient);
   color: #ffffff;
   border-color: rgba(124, 58, 237, 0.3);
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
@@ -58,9 +59,9 @@
 .voice-control-bar__exit {
   padding: 10px 24px;
   border-radius: 12px;
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(139, 92, 246, 0.05);
-  color: #6b21a8;
+  border: 1px solid var(--glass-border);
+  background: var(--element-bg);
+  color: var(--primary-accent);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -70,7 +71,7 @@
 }
 
 .voice-control-bar__exit:hover {
-  background: rgba(139, 92, 246, 0.12);
+  background: var(--element-bg-hover);
   border-color: rgba(139, 92, 246, 0.3);
   transform: translateX(-2px);
 }
@@ -94,9 +95,9 @@
 .voice-control-bar__action {
   padding: 8px 18px;
   border-radius: 10px;
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(139, 92, 246, 0.05);
-  color: #6b21a8;
+  border: 1px solid var(--glass-border);
+  background: var(--element-bg);
+  color: var(--primary-accent);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -104,7 +105,7 @@
 }
 
 .voice-control-bar__action:hover {
-  background: rgba(139, 92, 246, 0.12);
+  background: var(--element-bg-hover);
 }
 
 .footer-info__container {
@@ -125,7 +126,7 @@
 .footer-info__title {
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -133,7 +134,7 @@
 }
 
 .footer-info__description {
-  color: #9ca3af;
+  color: var(--text-tertiary);
   line-height: 1.6;
   font-size: 0.95rem;
 }
@@ -142,6 +143,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
+  color: var(--text-primary);
 }
 
 .footer-info__links {
@@ -151,18 +153,18 @@
 }
 
 .footer-info__link {
-  color: #9ca3af;
+  color: var(--text-tertiary);
   text-decoration: none;
   font-size: 0.95rem;
   transition: color 0.2s ease;
 }
 
 .footer-info__link:hover {
-  color: #a855f7;
+  color: var(--primary-accent);
 }
 
 .footer-info__contact {
-  color: #9ca3af;
+  color: var(--text-tertiary);
   font-size: 0.95rem;
   line-height: 1.8;
 }
