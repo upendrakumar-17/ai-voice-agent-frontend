@@ -7,7 +7,7 @@ export const ThemeProvider = ({ children }) => {
         // Check local storage or system preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) return savedTheme;
-        return 'light';
+        return 'dark';
     });
 
     useEffect(() => {
