@@ -24,6 +24,7 @@ const ChatPage = () => {
     const isVisualTyping = React.useRef(false);
     const statusMessageIndex = React.useRef(null); // Track index of status message
     const currentAudioRef = React.useRef(null); // Track current audio object
+    const isProcessingStopRef = React.useRef(false); // Guard against double processing of onstop
 
     React.useEffect(() => {
         if ('webkitSpeechRecognition' in window) {
@@ -74,6 +75,12 @@ const ChatPage = () => {
 
             recognitionRef.current = recognition;
         }
+
+        return () => {
+            if (recognitionRef.current) {
+                recognitionRef.current.abort(); // Cleanup on unmount
+            }
+        };
     }, []);
 
     const playNextAudio = async () => {
@@ -339,6 +346,12 @@ const ChatPage = () => {
             }
 
         } catch (error) {
+            // Ignore errors if we've already successfully processed the response
+            if (!isNetworkProcessing.current) {
+                console.warn('Stream closed after completion (ignoring error):', error);
+                return;
+            }
+
             console.error('Error sending audio:', error);
             removeStatusMessage();
             setMessages(prev => [...prev, { text: "Sorry, I couldn't process that request.", type: 'incoming' }]);
@@ -352,6 +365,8 @@ const ChatPage = () => {
     const toggleRecording = async () => {
         if (!isRecording) {
             try {
+                isProcessingStopRef.current = false; // Reset guard
+
                 // Start Speech Recognition
                 recognitionRef.current?.start();
                 // Create a placeholder message for live transcription
@@ -370,6 +385,9 @@ const ChatPage = () => {
                 };
 
                 mediaRecorderRef.current.onstop = async () => {
+                    if (isProcessingStopRef.current) return; // Prevent double execution
+                    isProcessingStopRef.current = true;
+
                     const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
                     // Stop all tracks
                     stream.getTracks().forEach(track => track.stop());
@@ -440,6 +458,32 @@ const ChatPage = () => {
         ]);
     };
 
+    const exitChat = () => {
+        // 1. Stop Audio Playback
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
+        }
+        audioQueueRef.current = [];
+        isPlayingAudioRef.current = false;
+
+        // 2. Stop Recording
+        if (isRecording) {
+            setIsRecording(false);
+            recognitionRef.current?.stop();
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                mediaRecorderRef.current.stop();
+            }
+        }
+
+        // 3. Reset Processing States
+        setIsResponding(false);
+        isNetworkProcessing.current = false;
+        isVisualTyping.current = false;
+        statusMessageIndex.current = null;
+
+    };
+
     return (
         <div className="home-wrapper">
             <Navbar />
@@ -451,7 +495,7 @@ const ChatPage = () => {
                     checkAllDone();
                 }}
             />
-            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} isResponding={isResponding} onReset={resetChat} />
+            <Footer isRecording={isRecording} setIsRecording={setIsRecording} onToggleRecording={toggleRecording} isResponding={isResponding} onExitChat={exitChat} onReset={resetChat} />
         </div>
     );
 };

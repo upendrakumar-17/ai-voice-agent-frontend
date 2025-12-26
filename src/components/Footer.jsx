@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SiriWaveform from './SiriWaveform';
 import '../css/Footer.css';
 
-const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding, onReset }) => {
+const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding, onReset, onExitChat }) => {
 
   const [isActive, setIsActive] = useState(false);
   const location = useLocation();
@@ -39,6 +39,9 @@ const Footer = ({ isRecording, setIsRecording, onToggleRecording, isResponding, 
   };
 
   const handleExitChat = () => {
+    if (onExitChat) {
+      onExitChat();
+    }
     setIsActive(false);
     navigate('/');
   };
